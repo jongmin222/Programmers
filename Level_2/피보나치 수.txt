@@ -1,0 +1,20 @@
+public class Solution {
+    public int solution(int n) {
+        int answer = 0;
+        
+        long curNum = 1;
+        long preNum = 0;
+        
+        for(int i=0;i<n-1;i++)
+        {
+            if(curNum > 12345670000000)
+                curNum-=12345670000000;
+            long temp = curNum+preNum;
+            preNum = curNum;
+            curNum = temp;
+        }
+        
+        answer = (int)(curNum%1234567);
+        return answer;
+    }
+}

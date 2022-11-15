@@ -1,0 +1,61 @@
+using System;
+using System.Linq;
+
+public class Solution {    
+    public long Sum(int[,] land, int p, int q, long number)
+    {
+        long result = 0;
+        for(int i = 0; i < land.GetLength(0) ; i++)
+        {
+            for(int j  = 0 ; j < land.GetLength(1) ; j++)
+            {
+                if(number > land[i,j])
+                    result += (number - land[i,j]) * p;
+                else if(number < land[i,j])
+                    result += (land[i,j] - number) * q;
+            }            
+        }
+        return result;
+    }
+    
+    public long solution(int[,] land, int p, int q) {
+        long max = 1000000000;
+        long min = 0;
+        long now = (max+min)/2;
+        
+        long answer = max*land.GetLength(0)*land.GetLength(1)*100;
+        
+        while(max - min > 1)
+        {
+            long sumMin = 0;
+            long sumNow = 0;
+            long sumMax = 0;            
+            
+            sumMin = Sum(land,p,q,now-1);
+            sumNow = Sum(land,p,q,now);
+            sumMax = Sum(land,p,q,now+1);
+            
+            if(answer > sumMin)
+                answer = sumMin;
+            
+            if(sumNow < sumMax)
+            {
+                if(answer > sumNow)
+                    answer = sumNow;
+                
+                max = now;
+                now = (max+min)/2;
+            }
+            else
+            {
+                if(answer > sumMax)
+                    answer = sumMax;
+                   
+                min = now;
+                now = (max+min)/2;
+            }
+        }
+        
+        return answer;
+    }
+}

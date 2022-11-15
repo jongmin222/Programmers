@@ -1,0 +1,42 @@
+using System;
+
+public class Solution {
+    public int NN(int N, int count)
+    {
+        if(count == 0)
+            return 0;
+        
+        return N * (int)Math.Pow(10,count-1)+NN(N, count-1);        
+    }
+    
+    public void calculation(int N, int count, int number, int result, int[] dp)
+    {
+        if(count == 0 && 0 < result && result < dp.Length && dp[result] > number)
+            dp[result] = number;
+        
+        for(int i = 1 ; i <= count ; i++)
+        {
+            calculation(N, count-i, number,result + NN(N,i), dp);
+            calculation(N, count-i, number,result - NN(N,i), dp);
+            calculation(N, count-i, number,result * NN(N,i), dp);
+            calculation(N, count-i, number,result / NN(N,i), dp);
+        }
+        
+        return;
+    }
+    public int solution(int N, int number) {
+        int answer = 0;
+        int[] dp = new int[number+1];
+        for(int i = 0; i < dp.Length ; i++)
+            dp[i] = 9;
+        dp[0] = 0;
+        dp[N] = 1;
+        for(int i = 2 ; i < 9 ; i++)
+            calculation(N,i,i,0,dp);
+        
+        answer = dp[number];
+        if(answer > 8)
+            answer = -1;
+        return answer;
+    }
+}

@@ -1,0 +1,30 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public int[] solution(string[] enroll, string[] referral, string[] seller, int[] amount) {
+        int[] answer = new int[enroll.Length];
+        Queue <(int, int)> queue = new Queue<(int, int)>();
+        Dictionary <string, int> dictionary = new Dictionary<string, int>();
+        for(int i = 0 ; i < enroll.Length; i++)
+            dictionary.Add(enroll[i],i);
+        
+        for(int sellerIndex = 0 ; sellerIndex < seller.Length; sellerIndex++)
+        {
+            queue.Enqueue((dictionary[seller[sellerIndex]], amount[sellerIndex] * 100));
+            while(queue.Count > 0)
+            {
+                (int index, int sale)= queue.Dequeue();
+                        
+                int price = sale - (int)(sale * 0.1);
+                answer[index] += price;
+                if(sale-price < 1 || referral[index]== "-")
+                    break;
+                
+                queue.Enqueue((dictionary[referral[index]], sale-price));                                
+            }
+        }
+        
+        return answer;
+    }
+}

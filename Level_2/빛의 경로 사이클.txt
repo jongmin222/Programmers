@@ -1,0 +1,71 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+
+    
+    public int[] solution(string[] grid) {
+        int[] answer = new int[] {};
+        List <int> list = new List<int>();        
+        bool[,,] isTried = new bool[grid[0].Length,grid.Length,4];
+        
+        for(int i=0;i<grid.Length;i++)
+        {            
+            for(int j=0;j<grid[i].Length;j++)
+            {
+                for(int k = 0 ; k < 4 ; k++)
+                {       
+                    int x = j;
+                    int y = i;
+                    int[] dx = new int[]{0,-1,0,1};
+                    int[] dy = new int[]{1,0,-1,0};
+                    
+                    int direction = k;
+                    int count = 0;
+                    
+                    while(true)
+                    {
+                        if(isTried[x,y,direction])
+                            break;
+                        else
+                            isTried[x,y,direction] = true;
+                        
+                        x = x+dx[direction];
+                        y = y+dy[direction];
+                        
+                        if(x > grid[i].Length-1)
+                            x = 0;
+                        else if(x < 0)
+                            x = grid[i].Length-1;
+                        
+                        if(y > grid.Length-1)
+                            y = 0;
+                        else if(y < 0)
+                            y = grid.Length-1;
+                        
+                        if(grid[y][x] == 'L')
+                            direction--;
+                        else if(grid[y][x] == 'R')
+                            direction++;
+                        
+                        if(direction > 3)
+                            direction = 0;
+                        else if(direction < 0)
+                            direction = 3;                        
+                        
+                        count++;
+                        
+                        if(x==j&& y==i&&k==direction)
+                        {
+                            list.Add(count);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        list.Sort();
+        answer = list.ToArray();
+        return answer;
+    }
+}

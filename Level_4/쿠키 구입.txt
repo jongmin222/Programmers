@@ -1,0 +1,34 @@
+using System;
+
+// mid : 0 ~ cookie.Length-2
+// indexA(0~mid) ~ mid, mid+1 ~ indexB(mid+1 ~ cookie.Length-1)
+
+public class Solution {
+    public int solution(int[] cookie) {
+        int answer = 0;
+        
+        for(int mid = 0 ; mid <= cookie.Length-2 ; mid++)
+        {
+            for(int startA = 0 ; startA <= mid ; startA++)
+            {
+                int sumA = 0;
+                int sumB = 0;
+                    
+                for(int A = startA ; A <= mid ; A++)
+                    sumA += cookie[A];
+                for(int B = mid+1 ; B <= cookie.Length-1 ; B++)
+                {
+                    sumB += cookie[B];
+                    
+                    if(sumA <= sumB)
+                        break;
+                }
+                
+                if(sumA == sumB && answer < sumA)
+                    answer = sumA;                
+            }
+        }
+        
+        return answer;
+    }
+}

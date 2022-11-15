@@ -1,0 +1,47 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+public class Solution {
+    public int[] solution(string[] id_list, string[] report, int k) {
+        
+        int[] answer = new int[id_list.Length];
+        int[] reportCount = new int[id_list.Length];
+
+        report = report.Distinct().ToArray();
+
+        
+        for(int i = 0 ; i < report.Length ; i++)
+        {
+            string[] word = report[i].Split(" ");
+            for(int j = 0 ; j < id_list.Length ; j++)
+            {
+                if(word[1] == id_list[j])
+                {
+                    reportCount[j]++;
+                    break;
+                }                
+            }
+        }
+        
+        for(int i = 0 ; i < report.Length ; i++)
+        {
+            string[] word = report[i].Split(" ");
+            for(int j = 0 ; j < id_list.Length ; j++)
+            {
+                if(word[1] == id_list[j] && reportCount[j] >= k)
+                {
+                    for(int m = 0 ; m < id_list.Length ; m++)
+                    {
+                        if(word[0] == id_list[m])
+                        {
+                            answer[m]++;                            
+                            break;
+                        }
+                    }                    
+                }   
+            }
+        }
+        
+        return answer;
+    }
+}

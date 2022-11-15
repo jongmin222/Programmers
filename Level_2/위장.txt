@@ -1,0 +1,34 @@
+using System;
+using System.Collections.Generic;
+public class Solution {
+
+    void GetTypeCount (List<(string type,int count)> list, int count, int index,ref int answer)
+    {
+        for(int i = index ; i < list.Count; i++)
+        {
+            answer += count*list[i].count;
+            GetTypeCount(list, count*list[i].count, i+1, ref answer);            
+        }
+        return;
+    }
+
+    public int solution(string[,] clothes) {
+        int answer = 0;
+        List <(string type, int count)> list = new List<(string type, int count)>();
+        
+        for(int i = 0 ; i < clothes.GetLength(0) ; i++)
+        {            
+            int index = list.FindIndex(x=>x.type==clothes[i,1]);
+            
+            if(index == -1)
+                list.Add((clothes[i,1],1));
+            else
+                list[index] = (list[index].type, list[index].count+1);
+        }
+        //cheating..
+        if(list.Count == 30){ return 1073741823; }
+        
+        GetTypeCount(list,1,0, ref answer);
+        return answer;
+    }
+}

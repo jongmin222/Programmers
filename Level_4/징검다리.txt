@@ -1,0 +1,46 @@
+using System;
+// 0 2 11 14 17 21 25
+public class Solution {
+    public int solution(int distance, int[] rocks, int n) {
+        int answer = 0;            
+        Array.Sort(rocks);
+        
+        int max = distance;
+        int min = 0;
+        int now = (max+min) / 2;              
+        int count, temp;
+        
+        while(max-min > 1)
+        {
+            temp = 0; 
+            count = 0;
+            
+            for(int i = 0 ; i < rocks.Length ; i++)
+            {
+                if(now > rocks[i] - temp)
+                    count++;
+                else
+                    temp = rocks[i];
+                
+                if(count > n)
+                {
+                    max = now;
+                    now = (max+min)/2;
+                    
+                    break;                    
+                }
+            }
+            
+            if(count <= n)
+            {
+                min = now;
+                now = (max+min)/2;
+                
+                if(answer < min)
+                    answer = min;
+            }
+        }        
+        
+        return answer;
+    }
+}

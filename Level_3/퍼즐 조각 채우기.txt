@@ -1,0 +1,183 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public void Setting(int[,] input, List<(int[,], int)> output, int mode)
+    {
+        bool[,] mask = new bool[input.GetLength(0),input.GetLength(1)];
+        Queue <(int,int)> queue = new Queue<(int,int)>();
+        int[] directionX = new int[4]{0,1,0,-1};
+        int[] directionY = new int[4]{1,0,-1,0};
+        
+        for(int i = 0 ; i < input.GetLength(0);i++)
+        {            
+            for(int j = 0 ; j < input.GetLength(1) ; j++)
+            {
+                if(input[i,j] == 1-mode || mask[i,j])
+                    continue;
+                
+                List <(int x, int y)> list = new List<(int, int)>();
+                mask[i,j] = true;
+                queue.Enqueue((i,j));
+                while(queue.Count>0)
+                {
+                    (int x, int y) = queue.Dequeue();
+                    list.Add((x,y));
+                    
+                    for(int k = 0 ; k < 4 ; k++)
+                    {
+                        int tempX = x+directionX[k];
+                        int tempY = y+directionY[k];
+                        
+                        if(0 > tempX || tempX > input.GetLength(0)-1 || 0 > tempY || tempY > input.GetLength(1)-1)
+                            continue;
+                        
+                        if(mask[tempX,tempY])
+                            continue;
+                        
+                        if(input[tempX,tempY]==mode)
+                        { 
+                            mask[tempX,tempY] = true;
+                            queue.Enqueue((tempX,tempY));
+                        }
+                    }
+                }
+                
+                int minX = list[0].x;
+                int minY = list[0].y;
+                int maxX = 0;
+                int maxY = 0;
+                for(int k = 0 ; k < list.Count ; k++)
+                {
+                    if(minX > list[k].x)
+                        minX = list[k].x;
+                    if(minY > list[k].y)
+                        minY = list[k].y;
+                }
+                for(int k = 0 ; k < list.Count ; k++)
+                {  
+                    list[k] = (list[k].x-minX, list[k].y-minY);
+                    
+                    if(maxX < list[k].x)
+                        maxX = list[k].x;
+                    if(maxY < list[k].y)
+                        maxY = list[k].y;
+                }
+                int[,] tempOutput = new int[maxX+1,maxY+1];
+                for(int k = 0 ; k < list.Count ; k++)
+                    tempOutput[list[k].x,list[k].y] = 1;
+                output.Add((tempOutput,list.Count));                
+            }
+        }
+        
+    }
+    
+    public int solution(int[,] game_board, int[,] table) {
+        int answer = 0;
+        
+        List<(int[,] matrix, int count)> space = new List<(int[,], int)>();
+        List<(int[,] matrix, int count)> block = new List<(int[,], int)>();
+        
+        Setting(game_board,space,0);
+        Setting(table,block,1);
+        bool[] mask = new bool[block.Count];
+        for(int i = 0 ; i < space.Count ; i++)
+        {
+            bool isFind = false;
+            for(int j = 0 ; j < block.Count ; j++)
+            {
+                if(mask[j]||
+                   space[i].count != block[j].count||
+                   space[i].matrix.Length != block[j].matrix.Length)
+                    continue;
+                
+                for(int k = 0 ; k < 4 ; k++)
+                {
+                    int number = 0;
+                    if(k==0)
+                    {
+                        if(space[i].matrix.GetLength(0) == block[j].matrix.GetLength(0))
+                        {    
+                            for(int x = 0 ; x < space[i].matrix.GetLength(0); x++)
+                            {
+                                for(int y = 0 ; y < space[i].matrix.GetLength(1); y++)
+                                {
+                                    if(space[i].matrix[x,y] == block[j].matrix[x,y] &&
+                                      block[j].matrix[x,y] == 1)
+                                    {
+                                        number++;
+                                    }
+                                }
+                            }
+                        }
+                    }                    
+                    else if(k==1)
+                    {
+                        if(space[i].matrix.GetLength(0) == block[j].matrix.GetLength(1))
+                        {    
+                            for(int x = 0 ; x < space[i].matrix.GetLength(0); x++)
+                            {
+                                for(int y = 0 ; y < space[i].matrix.GetLength(1); y++)
+                                {
+                                    if(space[i].matrix[x,y] == block[j].matrix[y,block[j].matrix.GetLength(1)-1-x] &&
+                                      space[i].matrix[x,y] == 1)
+                                    {
+                                        number++;
+                                    }
+                                }
+                            }
+                        }
+                    } 
+                                                                               
+                    else if(k==2)
+                    {
+                        if(space[i].matrix.GetLength(1) == block[j].matrix.GetLength(1))
+                        {    
+                            for(int x = 0 ; x < space[i].matrix.GetLength(0); x++)
+                            {
+                                for(int y = 0 ; y < space[i].matrix.GetLength(1); y++)
+                                {
+                                    if(space[i].matrix[x,y] == block[j].matrix[block[j].matrix.GetLength(0)-1-x,block[j].matrix.GetLength(1)-1-y] &&
+                                      space[i].matrix[x,y] == 1)
+                                    {
+                                        number++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    else if(k==3)
+                    {
+                        if(space[i].matrix.GetLength(1) == block[j].matrix.GetLength(0))
+                        {
+                            for(int x = 0 ; x < space[i].matrix.GetLength(0); x++)
+                            {
+                                for(int y = 0 ; y < space[i].matrix.GetLength(1); y++)
+                                {
+                                    if(space[i].matrix[x,y] == block[j].matrix[block[j].matrix.GetLength(0)-1-y,x] &&
+                                      space[i].matrix[x,y] == 1)
+                                    {
+                                        number++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    if(number == block[j].count)
+                    {                        
+                        mask[j] = true;
+                        answer += block[j].count;
+                        isFind = true;
+                        break;
+                    }
+                }
+                if(isFind)
+                    break;
+            }
+        }
+        
+        return answer;
+    }
+}

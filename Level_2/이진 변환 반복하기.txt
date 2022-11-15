@@ -1,0 +1,20 @@
+using System;
+using System.Linq;
+public class Solution {
+    public int[] solution(string s) {
+        int[] answer = new int[2];
+        int removeCount = 0;
+        int convertCount = 0;        
+        
+        while(s.Length > 1)
+        {            
+            removeCount += s.Where(x=>x.Equals('0')).Count();
+            s = Convert.ToString(s.Where(x=>x.Equals('1')).Count(),2);
+            convertCount++;
+        }
+        
+        answer[0] = convertCount;
+        answer[1] = removeCount;
+        return answer;
+    }
+}

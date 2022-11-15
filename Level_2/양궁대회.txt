@@ -1,0 +1,67 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public void search(int n, int[] info, List<int> answer, int[] array, int count, ref int gap)
+    {
+        if(count == n)
+        {
+            int[] score = new int[2];
+            
+            for(int i = 0 ; i < info.Length ; i++)
+            {
+                if(array[i] == 0 && info[i] == 0)
+                    continue;                
+                else if(array[i] <= info[i])
+                    score[1] += 10-i;
+                else
+                    score[0] += 10-i;
+            }
+            
+            if(score[0] > score[1] && gap <= score[0]-score[1])
+            {                
+                gap = score[0]-score[1];
+                answer.Clear();
+                for(int i = 0 ; i < array.Length ; i++)
+                    answer.Add(array[i]);
+                
+                return;
+            }
+            else if(answer.Count == 0 && score[0] <= score[1])
+            {
+                answer.Add(-1);
+                return;
+            }
+            
+            return;
+        }
+        
+        for(int i = 0 ; i < info.Length; i++)
+        {
+            if(array[i] != 0)
+                continue;
+            
+            if(count + info[i]+1 <= n)
+            {
+                array[i] = info[i] + 1;
+                search(n, info, answer, array, count+info[i]+1, ref gap);
+                array[i] = 0;
+            }
+            else if(count + info[i]+1 > n)
+            {                
+                array[i] = n-count;
+                search(n, info, answer, array, n, ref gap);
+                array[i] = 0;        
+            }
+        }
+    }
+    
+    public int[] solution(int n, int[] info) {
+        List <int> answer = new List<int>();
+        int[] array = new int[info.Length];
+        int gap = 0;
+        search(n, info, answer,array, 0, ref gap);
+
+        return answer.ToArray();
+    }
+}

@@ -1,0 +1,26 @@
+using System;
+
+public class Solution {
+    public int solution(string skill, string[] skill_trees) {
+        int answer = 0;        
+        
+        for(int i = 0 ; i < skill_trees.Length; i++)
+        {
+            int count = 0;
+            int index = 0;                 
+            
+            for(int j = 0 ; j < skill_trees[i].Length ; j++)
+            {
+                for(int k = 0 ; k < skill.Length ; k++)
+                    if(skill[k] == skill_trees[i][j])
+                        count++;
+                
+                if(index < skill.Length && skill[index] == skill_trees[i][j])
+                    index++;
+            }
+            if(count == index)
+                answer++;
+        }
+        return answer;
+    }
+}

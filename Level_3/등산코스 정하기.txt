@@ -1,0 +1,75 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public struct Info
+{
+    public int next;
+    public int time;
+}
+
+public class Solution {
+    public int[] solution(int n, int[,] paths, int[] gates, int[] summits) {
+        int[] answer = new int[2];
+        answer[0] = n;
+        answer[1] = 10000000;
+        int[] type = new int[n+1];
+        for(int i = 0 ; i < summits.Length ; i++)
+            type[summits[i]] = 1;
+        
+        List <List<Info>> pathList = new List<List<Info>>();        
+        for(int i = 0 ; i < n+1 ; i++)
+            pathList.Add(new List<Info>());
+        for(int i = 0 ; i < paths.GetLength(0) ; i++)
+        {
+            Info info;
+            info.time = paths[i,2];
+
+            info.next = paths[i,1];
+            pathList[paths[i,0]].Add(info);
+            
+            info.next = paths[i,0];
+            pathList[paths[i,1]].Add(info);
+        }
+        
+        Queue<int> queue = new Queue<int>();
+        int[] intensity = new int[n+1];
+        for(int i = 0 ; i < gates.Length ; i++)
+        {
+            queue.Enqueue(gates[i]);
+            
+            for(int j = 0 ; j < gates.Length ; j++)
+                intensity[gates[j]] = -1;
+            
+            while(queue.Count != 0)
+            {            
+                int now = queue.Dequeue();
+                if(answer[1] != 0 && answer[1] < intensity[now])
+                    continue;
+                
+                if(type[now] == 1)
+                {
+                    if(answer[1] > intensity[now]||
+                       answer[1] == intensity[now] && answer[0] > now)
+                    {
+                        answer[0] = now;
+                        answer[1] = intensity[now];
+                    }
+                    continue;
+                }
+                
+                for(int k = 0 ; k < pathList[now].Count ; k++)
+                {
+                    if(intensity[pathList[now][k].next] <= Math.Max(intensity[now], pathList[now][k].time) && intensity[pathList[now][k].next] != 0)
+                        continue;
+
+                    intensity[pathList[now][k].next] = Math.Max(intensity[now], pathList[now][k].time);
+                    
+                    queue.Enqueue(pathList[now][k].next);
+                }
+            }
+        }
+
+        return answer;
+    }
+}

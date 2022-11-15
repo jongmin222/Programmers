@@ -1,0 +1,35 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    
+    public void SearchDungeons(int currentK, int[,] dungeons, bool[] mask, int count, ref int answer)
+    {    
+        for(int i = 0 ; i < dungeons.GetLength(0); i++)
+        {  
+            if(mask[i] == true)
+                continue;
+        
+            if(currentK >= dungeons[i,0])
+            {
+                mask[i] = true;
+                SearchDungeons(currentK - dungeons[i,1], dungeons, mask, count+1,ref answer);
+                mask[i] = false;                
+            }
+        }
+        
+        if(answer < count)
+            answer = count;
+        
+        return;
+    }
+    
+    public int solution(int k, int[,] dungeons) {
+        int answer = -1;
+        bool[] mask = new bool[dungeons.GetLength(0)];
+        
+        SearchDungeons(k, dungeons, mask, 0,ref answer);
+        
+        return answer;
+    }
+}

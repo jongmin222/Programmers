@@ -1,0 +1,14 @@
+using System;
+using System.Collections.Generic;
+public class Solution {
+    public int solution(int n) {
+        int answer = 0;
+        
+        string str = n.ToString();
+        for(int i=0; i<str.Length ;i++)
+        {
+            answer += Int.Parse(str[i].ToString());
+        }
+        return answer;
+    }
+}

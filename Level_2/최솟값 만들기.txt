@@ -1,0 +1,22 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class Solution {
+    public int solution(int[] A, int[] B) {
+        int answer = 0;
+        int item = 4;
+        List <int> listA = A.ToList();
+        List <int> listB = B.ToList();
+
+        while(listA.Count>0)
+        {
+            answer += listA.Max()*listB.Min();
+
+            listA.RemoveAt(listA.IndexOf(listA.Max()));
+            listB.RemoveAt(listB.IndexOf(listB.Min()));
+        }
+        
+        return answer;
+    }
+}

@@ -1,0 +1,10 @@
+using System.Text;
+public class Solution {
+    public string solution(string s) {
+        string answer = "";
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0 ; i < s.Length; i++)
+            sb.Append(i == 0 || s[i-1] == ' ' ? s[i] >= 'a' && s[i] <= 'z' ? char.ToUpper(s[i]) : s[i] : s[i] >= 'A' && s[i] <= 'Z' ? char.ToLower(s[i]) : s[i]);
+        return sb.ToString();
+    }
+}

@@ -1,0 +1,38 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public int solution(int n, int[,] computers) {
+        int answer = 0;
+        int count = 0;
+        Queue <int> queue = new Queue<int>();
+        bool[] mask = new bool[n];
+        
+        for(int i = 0 ; i < n ; i++)
+        {
+            if(mask[i] == true)
+                continue;
+            
+            queue.Enqueue(i);
+            mask[i] = true;
+            count++;
+            while(queue.Count > 0)
+            {
+                int index = queue.Dequeue();
+                for(int j = 0; j < n ; j++)
+                {
+                    if(mask[j] == true)
+                        continue;
+                    
+                    if(computers[index,j] == 1)
+                    {
+                        queue.Enqueue(j);
+                        mask[j] = true;
+                    }
+                }
+            }
+        }
+        answer = count;        
+        return answer;
+    }
+}

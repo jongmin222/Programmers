@@ -1,0 +1,27 @@
+using System;
+
+public class Solution {
+    public int solution(int[,] sizes) {
+        int answer = 0;
+        int maxNum = 0, minNum = 0;
+        for(int i = 0 ; i < sizes.GetLength(0);i++)
+        {
+            if(maxNum == 0)
+            {
+                maxNum = Math.Max(sizes[i,0], sizes[i,1]);
+            }
+            else if(maxNum < Math.Max(sizes[i,0], sizes[i,1]))
+                maxNum = Math.Max(sizes[i,0], sizes[i,1]);
+            
+            if(minNum == 0)
+            {
+                minNum = Math.Min(sizes[i,0], sizes[i,1]);
+            }
+            else if(minNum < Math.Min(sizes[i,0], sizes[i,1]))
+                minNum = Math.Min(sizes[i,0], sizes[i,1]);            
+        }
+        
+        answer = maxNum * minNum;
+        return answer;
+    }
+}

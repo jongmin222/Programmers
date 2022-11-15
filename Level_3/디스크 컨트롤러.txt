@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class Solution {
+    public int solution(int[,] jobs) {
+        int answer = 0;
+        
+        List<(int start,int length)> list = new List<(int, int)>();
+        for(int i = 0 ; i < jobs.GetLength(0); i++)
+            list.Add((jobs[i,0],jobs[i,1]));
+        list = list.OrderBy(x=>x.start).ThenBy(x=>x.length).ToList();
+        
+        Queue <(int, int)> queue = new Queue<(int, int)>();
+        
+        int currentTime = list[0].start;
+        int maxTime = 0;
+        for(int i = 0 ; i < jobs.GetLength(0); i++)
+            maxTime += jobs[i,0]+jobs[i,1];
+
+        queue.Enqueue(list[0]);
+        list.RemoveAt(0);
+        while(currentTime <= maxTime)
+        {
+            if(queue.Count > 0)
+            {
+                (int start, int length) = queue.Dequeue();
+                currentTime += length;
+                currentTime = Math.Max(start+length,currentTime);
+                answer += currentTime - start;
+                Console.WriteLine(((start,length),(currentTime,answer),currentTime - start));
+            }
+            else
+            {
+                currentTime++;
+            }
+            
+            int minLength = 0;
+            for(int i = 0 ; i < list.Count ; i++)
+            {
+                if(i==0)
+                    minLength = list[0].length;
+
+                if(list[i].start <=currentTime && minLength > list[i].length)
+                    minLength = list[i].length;
+            }
+
+            int index = list.FindIndex(x=>x.length == minLength);            
+            if(index != -1)
+            {
+                queue.Enqueue(list[index]);
+                list.RemoveAt(index);          
+            }
+        }
+        
+        
+        return answer/jobs.GetLength(0);
+    }
+}

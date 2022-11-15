@@ -1,0 +1,86 @@
+using System;
+
+public class Solution {
+    public long solution(int n, int m, int x, int y, int[,] queries) {
+        long answer = -1;
+        long[] directionX = new long[4]{0,0,-1,1};
+        long[] directionY = new long[4]{-1,1,0,0};
+        
+        long minX = x;
+        long minY = y;
+        
+        long maxX = x;
+        long maxY = y;
+        
+        long fowardMinX;
+        long fowardMinY;
+        
+        long fowardMaxX;
+        long fowardMaxY;
+        
+        long backMinX;
+        long backMinY;
+        
+        long backMaxX;
+        long backMaxY;
+        
+        for(int i = queries.GetLength(0)-1 ; i >= 0 ; i--)
+        {            
+            fowardMinX = minX + directionX[queries[i,0]];
+            fowardMinY = minY + directionY[queries[i,0]];
+
+            fowardMaxX = maxX + directionX[queries[i,0]];
+            fowardMaxY = maxY + directionY[queries[i,0]];
+            
+            backMinX = minX - directionX[queries[i,0]]*queries[i,1];
+            backMinY = minY - directionY[queries[i,0]]*queries[i,1];
+
+            backMaxX = maxX - directionX[queries[i,0]]*queries[i,1];
+            backMaxY = maxY - directionY[queries[i,0]]*queries[i,1];
+            
+            // 벽 - 막힘(둘중하나) 반대 - 막히던말던,   방향 : Math.max(반대시도, 최대값)
+            // 방향 : queries[i,0] == 0 일때 maxY 증가(제거)
+            // 방향 : queries[i,0] == 1 일때 minY 감소(제거)
+            // 방향 : queries[i,0] == 2 일때 maxX 증가(제거)
+            // 방향 : queries[i,0] == 3 일때 minX 감소(제거)
+
+            // 벽 - 둘다 안막힘 반대 - 둘다 막힘    return 0 (도달할 수 없는지 검사용)
+
+            // 벽 - 안막힘min 반대 - 안막힘min 모두 증가 범위 조정 (벽에 안막혔을 때)
+            // 벽 - 안막힘max 반대 - 안막힘max 모두 증가 범위 조정 (벽에 안막혔을 때)
+            
+            if(!(0 <= fowardMinX && fowardMinX < n && 0 <= fowardMinY && fowardMinY < m)||
+               !(0 <= fowardMaxX && fowardMaxX < n && 0 <= fowardMaxY && fowardMaxY < m))
+            {
+                if(queries[i,0] == 0)
+                    maxY = Math.Min(backMaxY,m-1);
+                else if(queries[i,0] == 1)
+                    minY = Math.Max(backMinY,0);
+                else if(queries[i,0] == 2)
+                    maxX = Math.Min(backMaxX,n-1);
+                else if(queries[i,0] == 3)
+                    minX = Math.Max(backMinX,0);
+            }
+            else if((0 <= fowardMinX && fowardMinX < n && 0 <= fowardMinY && fowardMinY < m)&&
+                    (0 <= fowardMaxX && fowardMaxX < n && 0 <= fowardMaxY && fowardMaxY < m)&&
+                    !(0 <= backMinX && backMinX < n && 0 <= backMinY && backMinY < m)&&
+                    !(0 <= backMaxX && backMaxX < n && 0 <= backMaxY && backMaxY < m))
+            {
+                return 0;
+            }
+            else if(((0 <= fowardMinX && fowardMinX < n && 0 <= fowardMinY && fowardMinY < m)&&
+                     (0 <= backMinX && backMinX < n && 0 <= backMinY && backMinY < m))||
+                    ((0 <= fowardMaxX && fowardMaxX < n && 0 <= fowardMaxY && fowardMaxY < m)&&
+                     (0 <= backMaxX && backMaxX < n && 0 <= backMaxY && backMaxY < m)))
+            {
+                minX = Math.Max(backMinX,0);
+                minY = Math.Max(backMinY,0);
+                maxX = Math.Min(backMaxX,n-1);
+                maxY = Math.Min(backMaxY,m-1);
+            }            
+        }
+        
+        answer = (maxX-minX+1) * (maxY-minY+1);
+        return answer;
+    }
+}

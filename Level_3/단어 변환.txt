@@ -1,0 +1,42 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public int solution(string begin, string target, string[] words) {
+        int answer = 0;
+        Queue <(string, int)> queue = new Queue<(string, int)>();
+        bool[] mask = new bool[words.Length];
+        
+        queue.Enqueue((begin, 0));
+        while(queue.Count > 0)
+        {
+            (string word, int count) = queue.Dequeue();            
+            if(word == target)
+            {
+                answer = count;
+                break;
+            }
+            
+            for(int i = 0 ; i < words.Length; i++)
+            {
+                int sameCount = 0;
+                for(int j = 0 ; j < words[i].Length ; j++)
+                {
+                    if(mask[i] == true)
+                        continue;
+                    
+                    if(word[j] == words[i][j])
+                        sameCount++;
+                    
+                    if(sameCount+1 == word.Length)
+                    {
+                        queue.Enqueue((words[i],count+1));
+                        mask[i] = true;
+                    }
+                }                
+            }            
+        }
+        
+        return answer;
+    }
+}

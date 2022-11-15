@@ -1,0 +1,29 @@
+using System;
+
+public class Solution {
+    public int solution(int[] d, int budget) {
+        int answer = 0;
+        int temp = 0;
+        Array.Sort(d);
+        
+        for(int i = 0 ; i < d.Length ; i++)
+        {
+            temp += d[i];
+            
+            if(temp > budget)
+            {
+                answer = i;
+                break;
+            }
+            if(temp == budget)
+            {
+                answer = i+1;
+                break;
+            }
+        }
+        if(temp < budget)
+            answer = d.Length;
+        
+        return answer;
+    }
+}

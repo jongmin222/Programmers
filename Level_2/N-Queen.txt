@@ -1,0 +1,45 @@
+using System;
+
+public class Solution {
+    public void PutQueen(int putCount, int n, bool[,] floor, ref int answer){
+        
+        if(putCount == n)
+        {  
+            answer++;
+            return;
+        }
+        
+        for(int i = 0 ; i < n ; i++)
+        {
+            bool isContinue = false;
+            
+            for(int j = 0 ; j < putCount ; j++)
+            {
+                if(floor[j,i] == true ||
+                  (i - (putCount-j) >= 0 && floor[j,i-(putCount-j)] == true)||
+                  (i + (putCount-j) < n && floor[j,i+(putCount-j)] == true))
+                {
+                    isContinue = true;
+                    break;                    
+                }
+            }
+            if(isContinue == true)
+                continue;
+            
+            floor[putCount,i] = true;
+            PutQueen(putCount+1, n, floor, ref answer);
+            floor[putCount,i] = false;
+        }
+        
+        return;
+    }
+    
+    public int solution(int n) {
+        int answer = 0;
+        bool[,] floor = new bool[n,n];
+        
+        PutQueen(0, n, floor, ref answer);
+        
+        return answer;
+    }
+}

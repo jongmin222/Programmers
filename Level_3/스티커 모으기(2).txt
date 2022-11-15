@@ -1,0 +1,32 @@
+using System;
+using System.Linq;
+
+class Solution
+{
+    public void SetDP(int[] sticker, ref int answer, int start)
+    {
+        int[] dp = new int[sticker.Length];
+        dp[start] = sticker[start];
+        dp[start+1] = sticker[start+1];
+        for(int i = start+2 ; i < sticker.Length-(1-start); i++)
+            dp[i] = Math.Max(dp[i-2]+sticker[i],dp[i-1]-sticker[i-1]+sticker[i]);
+        
+        if(answer < dp.Max())
+            answer = dp.Max();
+        
+        return;
+    }
+    
+    public int solution(int[] sticker)
+    {
+        int answer = 0;
+        
+        if(sticker.Length <= 2)
+            return sticker.Max();
+        
+        SetDP(sticker, ref answer, 0);
+        SetDP(sticker, ref answer, 1);
+        
+        return answer;
+    }
+}

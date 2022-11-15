@@ -1,0 +1,91 @@
+using System;
+
+public class Solution {
+    public int[] solution(int[] answers) {
+       
+        People[] people = new People[3];
+        
+        people[0] = new People(new int[]{1,2,3,4,5},1);
+        people[1] = new People(new int[]{2,1,2,3,2,4,2,5},2);
+        people[2] = new People(new int[]{3,3,1,1,2,2,4,4,5,5},3);
+        
+        for(int i = 0 ; i < answers.Length ; i++)
+        {
+            people[0].checkSolution(answers[i]);
+            people[1].checkSolution(answers[i]);
+            people[2].checkSolution(answers[i]);
+        }        
+
+        for(int i = 0 ; i < 3 - 1 ; i++)
+        {   
+            People temp;
+            for(int j = 0 ; j < 3 - 1 ; j++){
+                if(people[j].correct < people[j+1].correct)
+                {
+                    temp = people[j];
+                    people[j] = people[j+1];
+                    people[j+1] = temp;
+                }
+            }
+        }
+        
+        int answerCount = 0;
+        for(int i = 0 ; i < 3 ; i++)
+        {            
+            if(people[0].correct == people[i].correct && people[i].correct > 0)
+            {
+                answerCount++;
+            }
+        }
+
+        int[] answer = new int[answerCount];
+        
+        for(int i = 0 ; i < answerCount ; i++)
+        {            
+            answer[i] = people[i].firstNum;
+        }
+
+        return answer;
+    }
+}
+
+public class People {
+        
+    public int correct;
+    public int[] pick;
+    public int count;
+    public int firstNum;
+    
+    public People()
+    {
+        this.correct = 0;
+        this.count = 0;
+    }
+    
+    public People(int[] pickedList, int num)
+    {
+        this.correct = 0;
+        this.count = 0;
+        this.pick = pickedList;
+        this.firstNum = num;
+    }
+    
+    private void circulator()
+    {        
+        this.count++;
+        if(this.count >= this.pick.Length)
+        {            
+            this.count = 0;
+        }
+    }
+    
+    public void checkSolution(int answer)
+    {
+        if(answer == this.pick[this.count])
+        {                
+            this.correct++;
+        }            
+        this.circulator();
+    }
+    
+}

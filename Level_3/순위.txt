@@ -1,0 +1,46 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class Solution {
+    
+    public int solution(int n, int[,] results) {
+        int answer = 0;
+        
+        
+            bool[,] graph = new bool[n + 1, n + 1];
+
+            for (int i = 0; i < results.GetLength(0); i++)
+            {
+                graph[results[i, 0], results[i, 1]] = true;
+            }
+
+            // i : 거쳐가는 노드
+            // j : 출발 노드
+            // k : 도착 노드
+
+            for (int i = 1; i <= n; i++)
+            {
+                for (int j = 1; j <= n; j++)
+                {
+                    for (int k = 1; k <= n; k++)
+                    {
+                        if (graph[j, i] && graph[i, k])
+                            graph[j, k] = true;
+                    }
+                }
+            }
+
+            for (int i = 1; i <= n; i++)
+            {
+                int count = 0;
+                for (int j = 1; j <= n; j++)
+                {
+                    if (graph[i, j] || graph[j, i]) ++count;
+                }
+
+                if (count == n - 1) ++answer;
+            }
+        return answer;
+    }
+}

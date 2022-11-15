@@ -1,0 +1,14 @@
+using System;
+
+public class Solution {
+    public string solution(string phone_number) {
+        string answer = "";        
+        char[] ch= phone_number.ToCharArray();
+        
+        for(int i = 0 ; i < ch.Length-4 ; i++)
+            ch[i] = '*';
+        answer = string.Concat(ch);
+        
+        return answer;
+    }
+}

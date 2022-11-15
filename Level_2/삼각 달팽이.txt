@@ -1,0 +1,45 @@
+using System;
+
+public class Solution {
+    public int[] solution(int n) {
+        int[] answer = new int[n*(n+1)/2];
+        int maxCount = n;
+        int currentCount = 1;
+        int setMode = 0;
+        int index = 0;
+        int circle = 0;
+        
+        for(int i = 1 ; i <= answer.Length; i++)
+        {            
+            answer[index] = i;
+            
+            currentCount++;
+            if(maxCount < currentCount)
+            {
+                maxCount--;
+                currentCount = 1;
+                setMode++;
+                if(setMode>2)
+                {
+                    setMode=0;
+                    circle++;
+                }                
+            }
+            
+            if(setMode==0)
+            {
+                index += currentCount+circle*2-1;
+            }
+            else if(setMode==1)
+            {
+                index+=1;
+            }
+            else if(setMode==2)
+            {
+                index -= n-currentCount-circle+1 ;                
+            }
+        }
+
+        return answer;
+    }
+}

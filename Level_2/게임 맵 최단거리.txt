@@ -1,0 +1,52 @@
+using System;
+using System.Collections.Generic;
+//[1,0,1,1,1],
+//[1,0,1,0,1],
+//[1,0,1,1,1],
+//[1,1,1,0,1],
+//[0,0,0,0,1]
+
+
+
+class Solution {    
+    public int solution(int[,] maps) {
+
+        int answer = 0;
+        int[] dx = {0,1,0,-1};
+        int[] dy = {1,0,-1,0};
+        Queue <(int, int)> que = new Queue<(int, int)>();
+        
+        int n = maps.GetLength(1);
+        int m = maps.GetLength(0);
+        int [,] arr = maps;
+        que.Enqueue((0,0));
+        
+        while(que.Count > 0)
+        {
+            int x;
+            int y;
+            
+            (x,y) = que.Dequeue();
+            if(x == m && y == n)
+                break;
+            
+            for(int i = 0 ; i < 4 ; i++)
+            {
+                if(x+dx[i] >= 0 && x+dx[i] < m &&
+                   y+dy[i] >= 0 && y+dy[i] < n &&
+                   arr[x+dx[i],y+dy[i]] == 1)
+                {
+                    que.Enqueue((x+dx[i],y+dy[i]));
+                    arr[x+dx[i],y+dy[i]] = arr[x,y] + 1;
+                }
+            }
+        }
+        
+        if(arr[m-1,n-1]==1)
+            answer = -1;
+        else
+            answer = arr[m-1,n-1];        
+        
+        return answer;
+    }
+}

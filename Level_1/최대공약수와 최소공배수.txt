@@ -1,0 +1,45 @@
+public class Solution {
+    public int[] solution(int n, int m) {
+        int[] answer = new int[]{};
+        
+        int maxNum = 0;
+        int minNum = 0;
+        
+        if(m < n)
+        {
+            int temp = m;
+            m = n;
+            n = temp;
+        }
+        
+        if(m % n == 0)
+            answer = new int[]{n,m};
+        else
+        {
+            for(int i = n ; i >= 1 ; i--)
+            {
+                if(n % i == 0 &&
+                   m % i == 0)
+                {
+                    maxNum = i;
+                    break;
+                }
+            }
+            
+            for(int i = 1 ; i <= n ; i++)
+            {
+                for(int j = 1 ; j <= m ; j++)
+                {
+                    if((m*i) == (n*j))
+                    {   
+                        minNum = m*i;
+                        answer = new int[]{maxNum, minNum};
+                        return answer;
+                    }
+                }
+            }
+        }
+        
+        return answer;
+    }
+}

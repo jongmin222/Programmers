@@ -1,0 +1,31 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public int solution(int[] numbers, int target) {
+        int answer = 0;
+        int count = 0;
+        int num = 0;
+        Queue<(int, int)> que = new Queue<(int, int)>();
+        
+        que.Enqueue((numbers[count], count));
+        que.Enqueue((-numbers[count], count));
+        while(que.Count > 0)
+        {
+            (num, count) = que.Dequeue();
+            count++;
+            if(count == numbers.Length)
+            {
+                if(num == target)
+                    answer++;                
+            }
+            else if(count < numbers.Length)
+            {
+                que.Enqueue((num+numbers[count], count));
+                que.Enqueue((num-numbers[count], count));
+            }            
+        }
+        
+        return answer;
+    }
+}

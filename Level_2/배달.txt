@@ -1,0 +1,39 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+class Solution
+{
+    public int solution(int N, int[,] road, int K)
+    {
+        int answer = 0;
+        int distance = 0;
+        int town = 1;
+        List <int> list = new List<int>();
+        Queue <(int,int)> queue = new Queue<(int,int)>();
+        queue.Enqueue((town,distance));
+        int[] towns = new int[N];
+        for(int i = 0 ; i < N ; i++)
+            towns[i] = 500000;
+        
+        while(queue.Count>0)
+        {
+            (town,distance) = queue.Dequeue();            
+
+            if(list.Contains(town) == false)
+                list.Add(town);
+            towns[town-1] = distance;
+            
+            for(int i = 0 ; i < road.GetLength(0); i++)
+            {
+                if(road[i,0] == town && towns[road[i,1]-1] > distance+road[i,2] && distance+road[i,2]<= K)
+                    queue.Enqueue((road[i,1],distance + road[i,2]));                
+                if(road[i,1] == town && towns[road[i,0]-1] > distance+road[i,2] && distance+road[i,2]<= K)
+                    queue.Enqueue((road[i,0],distance + road[i,2]));
+            }
+        }
+
+        answer = list.Count;
+        
+        return answer;
+    }
+}

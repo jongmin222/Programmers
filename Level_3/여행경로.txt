@@ -1,0 +1,54 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class Solution {
+    public void Search(List<(string now,string next)> ticketList, bool[] mask, List<string> answerList, string place, ref string[] answer)
+    {
+        if(answer.Length > 0)
+            return;
+        
+        if(mask.Contains(false) == false)
+        {
+            answer = answerList.ToArray();
+            
+            return;
+        }
+        
+        for(int i = 0 ; i < ticketList.Count ; i++)
+        {
+            if(mask[i] == true)
+                continue;
+            
+            if(ticketList[i].now == place)
+            {
+                mask[i] = true;
+                answerList.Add(ticketList[i].next);
+                    
+                Search(ticketList, mask, answerList, ticketList[i].next, ref answer);
+                
+                answerList.RemoveAt(answerList.Count-1);
+                mask[i] = false;
+            }
+            
+        }        
+        
+        return;
+    }
+    public string[] solution(string[,] tickets) {
+        string[] answer = new string[] {};
+        
+        List <(string now, string next)> ticketList = new List<(string, string)>();
+        for(int i = 0 ; i < tickets.GetLength(0) ; i++)
+            ticketList.Add((tickets[i,0],tickets[i,1]));
+        ticketList = ticketList.OrderBy(x=>x.next).ToList();
+        
+        bool[] mask = new bool[tickets.GetLength(0)];
+        List <string> answerList = new List<string>();
+        answerList.Add("ICN");
+        
+        Search(ticketList, mask, answerList,"ICN", ref answer);        
+        
+        return answer;
+    }
+}

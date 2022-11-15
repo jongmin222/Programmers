@@ -1,0 +1,52 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {    
+    public string solution(string[] survey, int[] choices) {
+        string answer = "";
+        
+        Dictionary<char, int> dictionary = new Dictionary<char, int>();
+        dictionary.Add('R', 0);
+        dictionary.Add('T', 0);
+        dictionary.Add('C', 0);
+        dictionary.Add('F', 0);
+        dictionary.Add('J', 0);
+        dictionary.Add('M', 0);
+        dictionary.Add('A', 0);
+        dictionary.Add('N', 0);
+        
+        for(int i = 0 ; i < choices.Length ; i++)
+        {
+            if(choices[i] < 4)
+            {
+                dictionary[survey[i][0]] += 4 - choices[i];
+            }
+            else if(choices[i] > 4)
+            {
+                dictionary[survey[i][1]] += choices[i] - 4;
+            }
+        }
+        
+        if(dictionary['R'] >= dictionary['T'])
+            answer += 'R';
+        else
+            answer += 'T';
+        
+        if(dictionary['C'] >= dictionary['F'])
+            answer += 'C';
+        else
+            answer += 'F';
+        
+        if(dictionary['J'] >= dictionary['M'])
+            answer += 'J';
+        else
+            answer += 'M';
+        
+        if(dictionary['A'] >= dictionary['N'])
+            answer += 'A';
+        else
+            answer += 'N';
+        
+        return answer;
+    }
+}

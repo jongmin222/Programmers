@@ -1,0 +1,35 @@
+using System;
+
+public class Solution {
+    public int solution(int[] a) {
+        int answer = 0;
+        int min;
+        int count = 2;
+        bool[] mask = new bool[a.Length];
+        
+        min = a[0];
+        for(int i = 1 ; i < a.Length-1; i++)
+        {
+            if(min > a[i])
+            {
+                count++;
+                mask[i] = true;
+                min = a[i];
+            }
+        }
+        
+        min = a[a.Length-1];
+        for(int i = a.Length-2 ; i >= 1; i--)
+        {           
+            if(min > a[i])
+            {
+                if(!mask[i])
+                    count++;
+                min = a[i];
+            }
+        }
+        
+        answer = count;
+        return answer;
+    }
+}

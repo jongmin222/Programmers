@@ -1,0 +1,13 @@
+using System.Collections.Generic;
+
+public class Solution {
+    public int[] solution(long n) {
+        List<int> answer = new List<int> {};
+        string str = n.ToString();
+        for(int i=0;i<str.Length;i++)
+            answer.Add(int.Parse(str[i].ToString()));
+        
+        answer.Reverse();
+        return answer.ToArray();
+    }
+}

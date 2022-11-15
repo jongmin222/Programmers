@@ -1,0 +1,51 @@
+using System;
+using System.Text;
+
+public class Solution {
+    public string solution(string number, int k) {
+        StringBuilder answer = new StringBuilder();
+        StringBuilder sb = new StringBuilder(number);        
+        int count = 0;
+        int startIndex = 1;
+        for(int i = 1 ; i < sb.Length ; i++)
+        {
+            if(i < startIndex)
+                i = startIndex;
+            
+            while(sb[i-1]=='9'||sb[i-1] == '!')
+                i++;
+            
+            while(sb[startIndex-1]=='9'||sb[startIndex-1] == '!')
+                startIndex++;
+            
+            
+            
+            int index = 0;
+            while(sb[i+index] == '!')
+                index++;
+            
+            if(sb[i-1] < sb[i+index])
+            {
+                sb[i-1] = '!';
+                count++;
+                i=0;
+                if(count == k)
+                {                    
+                    for(int j = 0 ; j < sb.Length ; j++)
+                    {
+                        if(sb[j]!='!')
+                            answer.Append(sb[j]);
+                    }
+                    return answer.ToString();
+                }
+            }     
+        }
+        
+        for(int j = 0 ; j < sb.Length-(k-count) ; j++)
+        {
+            if(sb[j]!='!')
+                answer.Append(sb[j]);
+        }
+        return answer.ToString();
+    }
+}

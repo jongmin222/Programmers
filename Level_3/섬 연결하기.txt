@@ -1,0 +1,45 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+        // 1. 제일 작은 path 찾기 둘다 mask = true
+        // 2. mask == true, 상대mask == false 인 것들 중에서 제일 작은 path 찾기 연결된 path mask = true (반복)
+        // 3. 모든 mask == true면 path stack 반환
+public class Solution {
+    public void Search(bool[] mask, List<(int a, int b, int cost)> list ,ref int answer)
+    {
+        for(int i = 0 ; i < list.Count ; i++)
+        {
+            if(mask[list[i].a] == true && mask[list[i].b] == false)
+            {
+                mask[list[i].b] = true;
+                answer += list[i].cost;
+                Search(mask, list, ref answer);
+                break;
+            }
+            else if(mask[list[i].b] == true && mask[list[i].a] == false)
+            {
+                mask[list[i].a] = true;
+                answer += list[i].cost;
+                Search(mask, list, ref answer);
+                break;
+            }
+        }
+        
+        return;
+    }
+    public int solution(int n, int[,] costs) {
+        int answer = 0;
+        List <(int a, int b, int cost)> list = new List<(int, int, int)>();        
+        for(int i = 0 ; i < costs.GetLength(0) ; i++)
+            list.Add((costs[i,0],costs[i,1],costs[i,2]));        
+        list = list.OrderBy(x=>x.cost).ToList();        
+        bool[] mask = new bool[n];
+        
+        mask[list[0].a] = true;
+        mask[list[0].b] = true;
+        answer += list[0].cost;        
+        Search(mask, list, ref answer);
+        
+        return answer;
+    }
+}

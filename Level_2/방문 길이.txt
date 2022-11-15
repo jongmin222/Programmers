@@ -1,0 +1,65 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    
+    struct Point{
+        
+        public int x;
+        public int y;
+    }
+    
+    public int solution(string dirs) {        
+        int answer = 0;
+        List <(Point, Point)> visitList = new List<(Point, Point)>();
+        
+        Point position;
+        position.x = 0;
+        position.y = 0;       
+        
+        foreach(char move in dirs)
+        {
+            Point before = position;
+            switch (move)
+            {
+                case 'U':
+                    position.y++;
+                    break;
+                case 'D':
+                    position.y--;
+                    break;
+                case 'R':
+                    position.x++;
+                    break;
+                case 'L':
+                    position.x--;
+                    break;
+            }
+            if(position.x < -5)
+            {
+                position.x++;
+                continue;
+            }
+            else if(position.x > 5)
+            {
+                position.x--;
+                continue;
+            }
+            if(position.y < -5)
+            {
+                position.y++;
+                continue;
+            }
+            else if(position.y > 5)
+            {
+                position.y--;
+                continue;
+            }
+            
+            if(!visitList.Contains((before,position))&&!visitList.Contains((position,before)))
+                visitList.Add((before,position));
+        }
+        answer = visitList.Count;
+        return answer;
+    }
+}

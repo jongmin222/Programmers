@@ -1,0 +1,17 @@
+using System.Collections.Generic;
+
+public class Solution {
+    public string solution(int n) {
+        string answer = "";
+        List <string>list=new List<string>();
+        for(int i=0;i<n;i++)
+        {
+            if(i%2==0)
+                list.Add("수");
+            else
+                list.Add("박");
+        }  
+        answer = string.Concat(list);
+        return answer;
+    }
+}

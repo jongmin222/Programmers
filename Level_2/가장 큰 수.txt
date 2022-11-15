@@ -1,0 +1,22 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+
+
+public class Solution {
+    public string solution(int[] numbers) {
+        StringBuilder answer = new StringBuilder();
+        Array.Sort(numbers, (a,b)=>
+                   (int.Parse(a.ToString()+b.ToString())>int.Parse((b.ToString()+a.ToString())))?-1:1);
+        
+        for(int i = 0 ; i < numbers.Length ; i++)
+            answer.Append(numbers[i].ToString());
+        
+        while(answer[0] == '0' && answer.Length > 1)
+            answer = answer.Remove(0, 1);
+        
+        return answer.ToString();
+    }
+}

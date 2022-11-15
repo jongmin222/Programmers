@@ -1,0 +1,51 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public int[] solution(int rows, int columns, int[,] queries) {        
+        List <int> answer = new List <int>();
+        
+        int[,] rect = new int[rows,columns];
+        for(int i = 0 ; i < rows ; i++)
+            for(int j = 0 ; j < columns ; j++)
+                rect[i,j] = i * columns + (j+1);
+
+        for(int i = 0 ; i < queries.GetLength(0) ; i++)
+        {
+            int minX = queries[i,0]-1;
+            int minY = queries[i,1]-1;
+            
+            int maxX = queries[i,2]-1;
+            int maxY = queries[i,3]-1;
+            
+            int x = minX;
+            int y = minY;
+            int temp1 = 0;
+            int temp2 = 0;
+            int min = rect[x,y];
+
+            for(int j = 0 ; j <= 2*(maxX-minX) + 2*(maxY-minY) ; j++)
+            {  
+                if(min > rect[x,y] && j != 2*(maxX-minX) + 2*(maxY-minY))
+                    min = rect[x,y];
+
+                temp1 = rect[x,y];
+                rect[x,y] = temp2;
+                temp2 = temp1;
+                
+                //x : 세로, y : 가로
+                if(y < maxY && x == minX)
+                    y++;
+                else if(y > minY && x == maxX)
+                    y--;
+                else if(y == minY && x > minX)
+                    x--;
+                else if(y == maxY && x < maxX)
+                    x++;
+            }
+            answer.Add(min);
+        }
+
+        return answer.ToArray();
+    }
+}

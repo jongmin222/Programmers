@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class Solution {
+    public void DFS(long[] a, List<List<int>> edgeList, bool[] mask, int vertex, ref long answer)
+    {
+        for(int j = 0 ; j < edgeList[vertex].Count ; j++)
+        {
+            if(mask[edgeList[vertex][j]]== true)
+                continue;
+
+            mask[vertex] = true;
+            DFS(a, edgeList, mask, edgeList[vertex][j], ref answer);
+
+            answer += Math.Abs(a[edgeList[vertex][j]]);
+            a[vertex] += a[edgeList[vertex][j]];
+            a[edgeList[vertex][j]] = 0;
+        }
+
+        return;
+    }
+
+    public long solution(int[] a, int[,] edges) {
+
+        if(a.Sum()%2==1 || a.Sum() != 0)
+            return -1;
+
+        long answer = 0;
+        bool[] mask = new bool[a.Length];
+
+        long[] A = new long[a.Length];
+        for(int i = 0 ; i < A.Length ; i++)
+            A[i] = a[i];
+
+        List<List<int>> edgeList = new List<List<int>>();        
+        for(int i = 0 ; i < a.Length ; i++)
+            edgeList.Add(new List<int>());
+        for(int i = 0 ; i < edges.GetLength(0) ; i++)
+        {
+            edgeList[edges[i,0]].Add(edges[i,1]);
+            edgeList[edges[i,1]].Add(edges[i,0]);
+        }
+
+        DFS(A, edgeList, mask, 0, ref answer);
+
+        return answer;
+    }
+}

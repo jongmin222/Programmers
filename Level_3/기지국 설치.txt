@@ -1,0 +1,42 @@
+using System;
+
+class Solution
+{
+    public int solution(int n, int[] stations, int w){
+        int answer = 0;
+        int index = 0;
+        int count = 0;
+        
+        for(int apartment = 1 ; apartment <= n; apartment++)
+        {
+            if(index >= stations.Length)
+            {
+                int gap = n+1 - apartment;
+                count += gap / (w*2+1) + Math.Min(gap % (w*2+1),1);
+                
+                break;
+            }
+            
+            int min = stations[index] - w;
+            int max = stations[index] + w;
+            
+            if(apartment < min)
+            {
+                int gap = min- apartment;
+                count += gap / (w*2+1) + Math.Min(gap % (w*2+1),1);
+                
+                apartment = max;
+                index++;
+            }
+            else
+            {
+                apartment = max;
+                index++;                
+            }
+        }
+
+        answer = count;
+        
+        return answer;
+    }
+}

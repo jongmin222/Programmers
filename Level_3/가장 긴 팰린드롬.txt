@@ -1,0 +1,45 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public int solution(string s) {
+        int answer = 0;
+        int count = 0;
+
+        for(int start = 0 ; start < s.Length; start++)
+        {
+            //홀수
+            count = 0;
+            for(int gap = 1 ; gap <= start ; gap++)
+            {
+                if(start+gap > s.Length-1)
+                    break;
+                
+                if(s[start-gap] == s[start+gap])
+                    count++;
+                else
+                    break;
+            }
+            if(answer < count*2+1)
+                answer = count*2+1;
+            
+            //짝수
+            count = 0;
+            for(int gap = 0 ; gap < start ; gap++)
+            {
+                if(start+gap > s.Length-1)
+                    break;
+                
+                if(s[start-1-gap] == s[start+gap])
+                    count++;
+                else
+                    break;
+            }
+            if(answer < count*2)
+                answer = count*2;
+        }
+
+        
+        return answer;
+    }
+}

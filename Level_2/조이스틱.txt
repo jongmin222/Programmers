@@ -1,0 +1,78 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    
+    public void SearchMoveCount(bool[] isDone, int direction, int currentIndex, int currentMoveCount,ref int resultMoveCount)
+    {   
+        if(direction == 0)
+        {            
+            SearchMoveCount((bool[])isDone.Clone(), 1, 0, 0, ref resultMoveCount);
+            SearchMoveCount((bool[])isDone.Clone(), -1, 0, 0, ref resultMoveCount);
+            return;
+        }
+        //direction == -1 왼쪽
+        //direction == 1 오른쪽
+        
+        for(int i = 1 ; i < isDone.Length; i++)
+        {
+            int index = currentIndex + i*direction;
+            if(index < 0)
+                index += isDone.Length;
+            else if(index >= isDone.Length)
+                index -= isDone.Length;
+            
+            if(isDone[index] == false)
+            {
+                isDone[index] = true;
+                currentMoveCount += i;
+                SearchMoveCount((bool[])isDone.Clone(), direction, index, currentMoveCount, ref resultMoveCount);
+                SearchMoveCount((bool[])isDone.Clone(), -direction, index, currentMoveCount, ref resultMoveCount);
+                
+                if(Array.Exists(isDone, x => x==false) == false)
+                { 
+                    if(resultMoveCount == 0)
+                        resultMoveCount = currentMoveCount;
+                    else if(resultMoveCount > currentMoveCount)
+                        resultMoveCount = currentMoveCount;
+                        
+                    return;
+                }                
+                break;                
+            }
+        }
+        
+        return;
+    }
+    
+    
+    public int solution(string name) {
+        int answer = 0;
+        bool[] isDone = new bool[name.Length];
+        int moveCount = 0;
+        int changeCount = 0;
+        
+        for(int i=0;i<name.Length;i++)
+        {
+            if(name[i] == 'A')
+                isDone[i] = true;
+        }
+        
+        for(int i=0;i<name.Length;i++)
+        {
+            if(isDone[i] == false)
+            {
+                int gap = name[i] - 'A';
+                if(gap > 13)
+                    gap = 26-gap;
+                changeCount += gap;
+            }         
+        }
+        isDone[0] = true;
+        SearchMoveCount(isDone, 0, -1, -1, ref moveCount);
+
+        answer = changeCount + moveCount;
+        
+        return answer;
+    }
+}

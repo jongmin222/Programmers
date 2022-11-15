@@ -1,0 +1,59 @@
+using System;
+using System.Text;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+public class Solution {
+    
+    public int TimeCalculate(int current, int previous){
+        
+        int gap= ((current/100-previous/100) * 60) + (current%100-previous%100);
+        
+        return gap;
+    }
+    
+    public int[] solution(int[] fees, string[] records) {
+        List <(string number, int time)> answer = new List<(string number, int time)>();
+        List<(string number, string time)> list = new List<(string number, string time)>();
+        int timeGap = 0;
+        
+        for(int i = 0 ; i < records.Length ; i++)
+        {
+            string[] info = records[i].Split(' ');
+            if(info[2] == "IN")
+                list.Add((info[1],info[0]));
+            else if(info[2] == "OUT")
+            {
+                int index = list.FindIndex(x => x.number.Equals(info[1]));
+                timeGap = TimeCalculate(Convert.ToInt32(info[0].Remove(2,1)),Convert.ToInt32(list[index].time.Remove(2,1)));
+                
+                int answerIndex = answer.FindIndex(x => x.number.Equals(info[1]));
+                if(answerIndex == -1)
+                    answer.Add((list[index].number,timeGap));
+                else
+                    answer[answerIndex]=(answer[answerIndex].number,answer[answerIndex].time+timeGap);
+                list.RemoveAt(index);
+            }
+        }
+        
+        for(int i = 0 ; i < list.Count ; i++)
+        {
+            timeGap = TimeCalculate(2359,Convert.ToInt32(list[i].time.Remove(2,1)));
+            int answerIndex = answer.FindIndex(x => x.number.Equals(list[i].number));
+            if(answerIndex == -1)
+                answer.Add((list[i].number,timeGap));
+            else
+                answer[answerIndex]=(answer[answerIndex].number,answer[answerIndex].time+timeGap);
+        }        
+        answer = answer.OrderBy(x=>x.number).ToList();
+        
+        int[] result = new int[answer.Count];
+        for(int i = 0 ; i < result.Length ; i++)
+        {
+            result[i] = fees[1];
+            if(answer[i].time > fees[0])
+                result[i] += (int)Math.Ceiling((answer[i].time-fees[0])/(double)fees[2])*fees[3];
+        }
+        return result;
+    }
+}

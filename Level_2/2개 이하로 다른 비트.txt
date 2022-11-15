@@ -1,0 +1,44 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    
+    public void SetList(double sum, double count, long number, List<long> list)
+    {        
+        double start = sum;
+        
+        if (number % 2 == 0)
+        {
+            list.Add((long)(number + 1));
+            return;
+        }
+        
+        while(sum < number)
+        {
+            count++;
+            sum+=Math.Pow(2,count);
+        }
+        
+        if(sum == number)
+        {
+            if(count == -1)
+                list.Add((long)(sum + Math.Pow(2,count+1)));
+            else
+                list.Add((long)(sum + Math.Pow(2,count+1) - Math.Pow(2,count)));
+        }
+        else
+            SetList(start+Math.Pow(2,count), -1, number, list);
+        
+        return;
+    }
+    
+    public long[] solution(long[] numbers) {
+        long[] answer = new long[] {};
+        List <long> list = new List<long>();
+        
+        for(int i = 0 ; i < numbers.Length ; i++)
+            SetList(0, -1, numbers[i], list);
+        
+        return list.ToArray();
+    }
+}

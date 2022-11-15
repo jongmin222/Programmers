@@ -1,0 +1,65 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+public class Solution {
+    
+    public bool IsPrime (int num)
+    {
+        if(num < 2)
+            return false;
+        else
+        {
+            for(int i = 2 ; i <= Math.Sqrt(num) ; i++)
+            {
+                if(num % i == 0)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+        
+    public void NumberCombination(string numbers, StringBuilder sb, List<int> index, List<string> odds)
+    {
+        for(int i = 0 ; i < numbers.Length ; i++)
+        {
+            bool isNext = false;
+            for(int j = 0 ; j < index.Count ; j++)
+            {
+                if(i == index[j])
+                {
+                    isNext = true;
+                    break;
+                }
+            }
+            if(isNext)
+                continue;
+                
+            index.Add(i);
+            sb.Append(numbers[i]);
+            if(IsPrime(Convert.ToInt32(sb.ToString())))
+                odds.Add(sb.ToString());
+            
+            NumberCombination(numbers,sb,index, odds);
+            
+            sb.Remove(sb.Length-1,1);
+            index.RemoveAt(index.Count-1);
+        }
+        return;
+    }
+    
+    public int solution(string numbers) {
+        int answer = 0;        
+        StringBuilder sb = new StringBuilder();
+        List <int> index = new List<int>();
+        List <string> odds = new List<string>();
+        
+        NumberCombination(numbers, sb, index, odds);
+        int[] numArray = odds.Select(n => Convert.ToInt32(n)).Distinct().ToArray();
+        
+        answer = numArray.Length;
+        return answer;
+    }
+}

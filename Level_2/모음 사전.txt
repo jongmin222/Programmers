@@ -1,0 +1,46 @@
+using System;
+using System.Text;
+
+public class Solution {    
+
+    public int solution(string word) {
+        int answer = 0;
+        int value = 0;
+        int sum = 0;
+        int wordValue = 0;
+        for(int i = 0 ; i < word.Length ; i++)
+        {
+            value = 0;
+            for(int j = 0 ; j < 5-i ; j++)
+            {
+                value += (int)Math.Pow(5,j);
+            }
+            
+            switch(word[i])
+            {
+                case 'A':
+                    wordValue = 0;
+                    break;
+                case 'E':
+                    wordValue = 1;
+                    break;
+                case 'I':
+                    wordValue = 2;
+                    break;
+                case 'O':
+                    wordValue = 3;
+                    break;
+                case 'U':
+                    wordValue = 4;
+                    break;
+                default:
+                    wordValue = 0;
+                    sum--;
+                    break;
+            }            
+            sum += value*wordValue+1;
+        }
+        answer= sum;
+        return answer;
+    }
+}

@@ -1,0 +1,40 @@
+using System;
+using System.Linq;
+public class Solution {
+    public int[] solution(int[,] arr) {
+        int[] answer = new int[] {};
+        bool[,] isZip = new bool[arr.GetLength(0),arr.GetLength(1)];
+        int[] count = new int[2];
+        for(int i = 0 ; i < arr.GetLength(0);i++)
+            for(int j = 0 ; j < arr.GetLength(0);j++)
+                count[arr[i,j]]++;
+        
+        for(int gap = 2 ; gap <= arr.GetLength(0)/2 ; gap*=2)
+        {
+            for(int i = 0 ; i < arr.GetLength(0)-1;i+=gap)
+            {
+                for(int j = 0 ; j < arr.GetLength(0)-1;j+=gap)
+                {
+                    int stack = 0;
+                    for(int iIndex = 0; iIndex < gap ; iIndex++)
+                    {
+                        for(int jIndex = 0; jIndex < gap ; jIndex++)
+                        {
+                            if(arr[i+iIndex,j+jIndex]==arr[i,j])
+                                stack++;                       
+                        }                    
+                    }
+                    if(stack == Math.Pow(gap,2))
+                        count[arr[i,j]]-=3;
+                }            
+            }
+        }
+        
+        if(count[0]==0)
+            count[1]=1;
+        else if(count[1]==0)
+            count[0]=1;
+        
+        return count;
+    }
+}

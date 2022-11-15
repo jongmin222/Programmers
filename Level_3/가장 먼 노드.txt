@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class Solution {
+    public int solution(int n, int[,] edge) {
+        int answer = 0;        
+        bool[,] matrix = new bool[n+1,n+1];    
+        for(int i = 0 ; i < edge.GetLength(0) ; i++)
+        {
+            matrix[edge[i,0], edge[i,1]] = true;
+            matrix[edge[i,1], edge[i,0]] = true;
+        }
+        int[] counts = new int[n+1];
+        bool[] mask = new bool[matrix.GetLength(0)];
+        mask[0] = true;
+        mask[1] = true;
+        Queue <int> queue = new Queue<int>();
+        
+        queue.Enqueue(1);
+        while(queue.Count>0)
+        {
+            int now = queue.Dequeue();
+            for(int next = 0 ; next < matrix.GetLength(0) ; next++)
+            {
+                if(matrix[now,next] == false)
+                    continue;
+            
+                if(mask[next] == true)
+                    continue;
+            
+                queue.Enqueue(next);
+                counts[next] = counts[now]+1;                    
+                mask[next] = true;
+            }
+        }
+        
+        int maxCount = counts.Max();
+        answer = counts.Where(x=>x.Equals(maxCount)).Count();
+        
+        return answer;
+    }
+}

@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public int[] solution(string[,] places) {
+        List <int> answer = new List <int> ();
+        
+        for(int room = 0 ; room < 5 ; room++)
+        {
+            Queue <(int,int)> queue = new Queue<(int,int)>();
+            bool isFound = false;
+            for(int i = 0 ; i < 5 ; i++)
+            {
+                for(int j = 0 ; j < 5 ; j++)
+                {
+                    if(places[room,i][j] == 'P')
+                    {
+                        queue.Enqueue((i,j));
+                        while(queue.Count > 0)
+                        {
+                            (int posY, int posX) = queue.Dequeue();
+                            int[] dx= new int[]{0,-1,0,1};
+                            int[] dy= new int[]{1,0,-1,0};
+                            
+                            for(int k = 0 ; k < 4 ; k++)
+                            {
+                                int x = posX + dx[k];
+                                int y = posY + dy[k];
+                                
+                                if(0 <= x && x < 5 &&
+                                  0 <= y && y < 5 &&
+                                   (Math.Abs(i-y) + Math.Abs(j-x) > 0))
+                                {
+                                    if(places[room,y][x] == 'O'&&
+                                       Math.Abs(i-y) + Math.Abs(j-x) < 2)
+                                        queue.Enqueue((y,x));
+                                    else if(places[room,y][x] == 'P'&&
+                                           Math.Abs(i-y) + Math.Abs(j-x) < 3)
+                                    {
+                                        answer.Add(0);
+                                        queue.Clear();
+                                        isFound = true;
+                                        break;
+                                    }
+                                }
+                            }                            
+                        }
+                    }
+                    if(isFound) break;
+                }
+                if(isFound) break;
+            }
+            if(!isFound) answer.Add(1);
+        }
+        
+        return answer.ToArray();
+    }
+}

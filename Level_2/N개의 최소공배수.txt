@@ -1,0 +1,52 @@
+using System.Collections.Generic;
+using System;
+
+public class Solution {    
+    public bool IsPrime(int number)
+    {
+        if(number == 1)
+            return false;        
+        for(int i = 2 ; i <= Math.Sqrt(number) ; i++)
+        {
+            if(number % i == 0)
+                return false;
+        }
+        return true;
+    }
+    
+    public int solution(int[] arr) {
+        int answer = 1;
+        List <int> numbers = new List<int>();        
+        
+        for(int i = 0 ; i < arr.Length ; i++)
+        {
+            List <int> divisors = new List<int>();
+            
+            if(IsPrime(arr[i]) && !numbers.Contains(arr[i]))
+                numbers.Add(arr[i]);
+            else
+            {
+                int currentNumber = arr[i];
+                for(int j = 2 ; j < arr[i] ; j++)
+                {
+                    if(currentNumber % j == 0)
+                    {
+                        divisors.Add(j);
+                        currentNumber /= j;
+                        j = 1;
+                    }
+                }
+                
+                foreach(int number in numbers)
+                    divisors.Remove(number);
+                
+                foreach(int divisor in divisors)
+                    numbers.Add(divisor);
+            }            
+        }
+        
+        foreach(int number in numbers)
+            answer *= number;        
+        return answer;
+    }
+}
