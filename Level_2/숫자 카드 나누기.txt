@@ -1,0 +1,31 @@
+using System;
+using System.Linq;
+
+public class Solution {
+    public int solution(int[] arrayA, int[] arrayB) {
+        
+        int length = arrayA.Length;
+        int minA = arrayA.Min();
+        int minB = arrayB.Min();
+        int min = minA > minB ? minA : minB;
+        int i;
+        
+        for(int k = min ; k > 1; k--)
+        {
+            //A 나뉨, B 안나뉨
+            for(i = 0; i < length ; i++)
+                if(arrayA[i] % k != 0 || (arrayB[i] % k == 0 && k <= arrayB[i]))
+                    break;
+            if(i == length)
+                return k;
+            
+            //A 안나뉨, B 나뉨
+            for(i = 0; i < length ; i++)
+                if(arrayB[i] % k != 0 || (arrayA[i] % k == 0 && k <= arrayA[i]))
+                    break;
+            if(i == length)
+                return k;
+        }
+        return 0;
+    }
+}

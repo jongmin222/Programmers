@@ -1,0 +1,21 @@
+using System;
+using System.Text;
+
+public class Solution {
+    public string solution(int[] food) {
+        
+        StringBuilder sb = new StringBuilder();
+        string answer = "";
+        
+        for(int i = 0 ; i < food.Length ; i++)
+            for(int j = 0 ; j < food[i]/2 ; j++)
+                sb.Append(i.ToString());
+        
+        sb.Append("0");     
+        for(int i = sb.Length-2 ; i >= 0 ; i--)
+            sb.Append(sb[i]);
+        
+        answer = sb.ToString();
+        return answer;
+    }
+}
