@@ -1,0 +1,26 @@
+using System;
+
+public class Solution {
+    
+    void Recursion(int a, int b, int n, ref int answer)
+    {
+        if(n < a)
+            return;
+        
+        int divide = n/a;
+        n -= divide * a;
+        n += divide * b;
+        answer += divide * b;
+        
+        Recursion(a,b,n, ref answer);
+        
+        return;
+    }
+    
+    public int solution(int a, int b, int n) {
+        int answer = 0;
+        Recursion(a,b,n, ref answer);
+        
+        return answer;
+    }
+}

@@ -1,0 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class Solution {    
+    public int solution(int[] elements) {
+        
+        int answer = 0;
+        List<int> list = new List<int>();
+        
+        for(int start = 0 ; start < elements.Length ; start++)
+        {
+            int sum = 0;
+            
+            for(int offset = 0 ; offset < elements.Length ; offset++)
+            {
+                int index = start + offset;
+                if(index >= elements.Length)
+                    index -= elements.Length;
+                
+                sum += elements[index];
+                
+                list.Add(sum);
+            }     
+        }
+        
+        list.Sort();
+        answer = list.Distinct().ToArray().Length;
+        
+        return answer;
+    }
+}
