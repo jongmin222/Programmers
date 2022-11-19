@@ -1,0 +1,30 @@
+using System;
+
+public class Solution {
+    public int solution(string[] want, int[] number, string[] discount) {
+        int answer = 0;
+        
+        for(int start = 0 ; start < discount.Length-9 ; start++)
+        {
+            int[] count = new int[number.Length];
+            for(int i = start ; i < start+10 ; i++)
+            {
+                int index = Array.IndexOf(want, discount[i]);
+                if(index == -1)
+                    continue;
+                
+                count[index]++;
+            }
+            
+            int j;
+            for(j = 0 ; j < number.Length; j++)
+                if(count[j] < number[j])
+                    break;
+            
+            if(j == number.Length)
+                answer++;            
+        }
+        
+        return answer;
+    }
+}

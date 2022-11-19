@@ -1,0 +1,59 @@
+using System;
+
+public class Solution {
+    public int solution(int distance, int[,] scope, int[,] times) {
+        int answer = 0;        
+        int length = scope.GetLength(0);
+        
+        int time = 0;
+        int[] personTime = new int[length];
+        
+        int position = 0;
+        
+        bool[] isWorking = new bool[length];
+        bool[] canSee = new bool[length];
+        
+        for(int i = 0 ; i < length ; i++)
+            isWorking[i] = true;
+        
+        while(time < distance)
+        {
+            ++time;
+            ++position;            
+            
+            for(int i = 0 ; i < length ; i++)
+            {
+                ++personTime[i];
+                
+                //볼 수 있는지 여부
+                if((scope[i,0] < scope[i,1] && (position == scope[i,0] || position == scope[i,1]+1))||
+                  (scope[i,0] > scope[i,1] && (position == scope[i,0]+1 || position == scope[i,1])))
+                {
+                    if(canSee[i] == true)
+                        canSee[i] = false;
+                    else
+                        canSee[i] = true;                    
+                }
+                
+                if(isWorking[i] && canSee[i])
+                    return position;
+                
+                //일을 하는지 여부
+                if(isWorking[i] == true && personTime[i] == times[i,0])
+                {
+                    isWorking[i] = false;
+                    personTime[i] = 0;
+                }                   
+                else if(isWorking[i] == false && personTime[i] == times[i,1])
+                {
+                    isWorking[i] = true;
+                    personTime[i] = 0;
+                }               
+                
+            }            
+        }
+        answer = position;
+        
+        return answer;
+    }
+}
