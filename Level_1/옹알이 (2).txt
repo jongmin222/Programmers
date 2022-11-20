@@ -1,0 +1,36 @@
+using System;
+
+public class Solution {
+    public int solution(string[] babbling) {
+        int answer = 0;
+        int count = 0;
+        
+        string[] sounds = new String[4]{"aya", "ye", "woo", "ma"};
+        
+        for(int i = 0 ; i < babbling.Length ; i++)
+        {
+            int length = 0;
+            
+            for(int j = 0 ; j < sounds.Length ; j++)
+            {
+                if(babbling[i].Contains(sounds[j]+sounds[j]))
+                    break;
+                
+                for(int k = 0 ; k < babbling[i].Length-sounds[j].Length+1 ; k++)
+                {
+                    if(babbling[i].Substring(k,sounds[j].Length) == sounds[j])
+                    {
+                        k += sounds[j].Length-1;
+                        length += sounds[j].Length;
+                    }
+                }
+            }
+            
+            if(babbling[i].Length == length)
+                count++;
+        }
+        
+        answer = count;
+        return answer;
+    }
+}
