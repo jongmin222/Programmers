@@ -1,0 +1,25 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public int solution(int[] topping) {
+        int answer = 0;
+        HashSet<int> hashsetA = new HashSet<int>();
+        HashSet<int> hashsetB = new HashSet<int>();
+        int[] counts = new int[topping.Length];
+        for(int i = 0; i < topping.Length ; i++)
+        {
+            hashsetA.Add(topping[i]);
+            counts[i] = hashsetA.Count;
+        }
+
+        for(int i = topping.Length-1; i > 0 ; i--)
+        {
+            hashsetB.Add(topping[i]);
+            if(counts[i-1]==hashsetB.Count)
+                answer++;
+        }
+
+        return answer;
+    }
+}
