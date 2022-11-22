@@ -1,0 +1,54 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public int solution(int[] order) {
+        int answer = 0;
+        int index = 0;
+        Stack<int> stack = new Stack<int>();
+        
+        for(int box = 1 ; box <= order.Length; box++)
+        {
+            //배열 -> 트럭
+            if(box == order[index])
+            {
+                ++answer;
+                ++index;
+                continue;
+            }
+            else
+            {
+                //배열 -> 스택
+                if(stack.Count == 0)
+                    stack.Push(box);                
+                else
+                {                    
+                    //스택 -> 트럭
+                    if(stack.Peek() == order[index])
+                    {
+                        stack.Pop();
+                        ++index;
+                        ++answer;
+                        --box;
+                        continue;
+                    }
+                    //배열 -> 스택
+                    else
+                        stack.Push(box);
+                }
+            }
+        }
+        
+        //배열에 없고 전부 스택일 때
+        int length = stack.Count;
+        for(int i = 0 ; i < length ; i++)
+        {
+            if(stack.Pop() == order[index+i])
+                answer++;
+            else
+                break;
+        }        
+        
+        return answer;
+    }
+}
