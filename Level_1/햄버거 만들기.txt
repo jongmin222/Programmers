@@ -1,0 +1,28 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public int solution(int[] ingredient) {
+        int answer = 0;
+        int firstBread = ingredient.Length;
+        List <int> list = new List<int>(ingredient);
+        
+        bool isFind = true;
+        while(isFind == true)
+        {            
+            isFind = false;
+            for(int i = 0 ; i < list.Count-3 ; i++)
+            {
+                if(list[i] == 1 && list[i+1] == 2 && list[i+2] == 3 && list[i+3] == 1)
+                {
+                    list.RemoveRange(i,4);
+                    i = 0 > i-3 ? 0 : i-3;                    
+                    answer++;
+                    isFind = true;
+                }
+            }
+        }
+        
+        return answer;
+    }
+}
