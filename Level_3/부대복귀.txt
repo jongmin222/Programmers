@@ -1,0 +1,47 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public int[] solution(int n, int[,] roads, int[] sources, int destination) {
+        int[] answer = new int[sources.Length];
+        bool[] mask = new bool[n+1];
+        Queue <(int, int)> queue = new Queue<(int, int)>(n);
+        Dictionary<int, List<int>> roadDictionary = new Dictionary<int, List<int>>(n);
+        
+        for(int i = 1 ; i <= n ; i++)
+            roadDictionary.Add(i,new List<int>());
+        
+        for(int i = 0 ; i < roads.GetLength(0) ; i++)
+        {
+            roadDictionary[roads[i,0]].Add(roads[i,1]);
+            roadDictionary[roads[i,1]].Add(roads[i,0]);
+        }
+        
+        
+        for(int i = 0 ; i < answer.Length ; i++)
+            answer[i] = -1;
+        
+        queue.Enqueue((destination,0));
+        mask[destination] = true;
+        
+        while(queue.Count > 0)
+        {
+            (int now, int count) = queue.Dequeue();
+            
+            for(int i = 0;i < roadDictionary[now].Count ; i++)
+            {
+                if(mask[roadDictionary[now][i]])
+                    continue;
+                
+                mask[roadDictionary[now][i]] = true;
+                queue.Enqueue((roadDictionary[now][i],count+1));
+            }
+            
+            for(int i = 0 ; i < sources.GetLength(0); i++)
+                if(now == sources[i])
+                    answer[i] = count;
+        }
+                
+        return answer;
+    }
+}
