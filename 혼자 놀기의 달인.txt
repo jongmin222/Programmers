@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public int solution(int[] cards) {
+        int answer = 1;
+        bool[] mask = new bool[cards.Length];
+        int index;
+        List<int> counts = new List<int>();
+        
+        for(int i = 0 ; i < cards.Length ; i++)
+        {
+            int count = 0;  
+            
+            index = i;
+            if(mask[index])
+                continue;
+            mask[index] = true;
+            ++count;
+            
+            while(true)
+            {                
+                index = cards[index]-1;
+                if(mask[index])
+                {          
+                    counts.Add(count);
+                    break;                    
+                }
+                mask[index] = true;
+                ++count;
+            } 
+        }
+        if(counts.Count < 2)
+            answer = 0;
+        else
+        {
+            counts.Sort();
+            counts.Reverse();
+            answer = counts[0] * counts[1];
+        }
+        return answer;
+    }
+}
