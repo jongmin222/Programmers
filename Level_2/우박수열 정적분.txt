@@ -1,0 +1,44 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public double[] solution(int k, int[,] ranges) {
+        double[] answer = new double[ranges.GetLength(0)];
+        List<double> list = new List<double>(400);
+        
+        list.Add(k);
+        while(k > 1)
+        {  
+            if(k % 2 == 0)
+                k = k/2;
+            else
+                k = k*3+1;
+            
+            list.Add(k);
+        }
+        
+        for(int i = 0 ; i < ranges.GetLength(0) ; i++)
+        {
+            int length = list.Count-1;
+            int a = ranges[i,0];
+            int b = length+ranges[i,1];
+            
+            if(a > b)
+                answer[i] = -1;
+            else if(a == b)
+                answer[i] = 0;
+            else 
+            {
+                for(int j = a ; j < b ; j++)
+                {
+                    if(list[j] > list[j+1])
+                        answer[i] += (list[j]-list[j+1])/2+list[j+1];
+                    else
+                        answer[i] += (list[j+1]-list[j])/2+list[j];
+                }
+            }
+        }        
+        
+        return answer;
+    }
+}
