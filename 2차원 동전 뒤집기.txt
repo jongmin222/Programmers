@@ -1,0 +1,83 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    void Search(int[,] now, int[,] target, int rowCount, int columnCount, int rowIndex, int columnIndex, int maxCount, ref int answer)
+    {
+        if(now.GetLength(0) > rowIndex)
+        {
+            Search(now, target, rowCount, columnCount, rowIndex+1, columnIndex, maxCount, ref answer);
+
+            for(int j = 0 ; j < now.GetLength(1) ; j++)
+            {
+                if(now[rowIndex,j] == 0)
+                    now[rowIndex,j] = 1;
+                else
+                    now[rowIndex,j] = 0;                    
+            } 
+
+            Search(now, target, rowCount+1, columnCount, rowIndex+1, columnIndex, maxCount, ref answer);
+
+            for(int j = 0 ; j < now.GetLength(1) ; j++)
+            {
+                if(now[rowIndex,j] == 0)
+                    now[rowIndex,j] = 1;
+                else
+                    now[rowIndex,j] = 0;                    
+            }
+        }
+        else if(now.GetLength(1) > columnIndex)
+        {  
+            Search(now, target, rowCount, columnCount, rowIndex, columnIndex+1, maxCount, ref answer);
+
+            for(int i = 0 ; i < now.GetLength(0) ; i++)
+            {
+                if(now[i,columnIndex] == 0)
+                    now[i,columnIndex] = 1;
+                else
+                    now[i,columnIndex] = 0;                    
+            } 
+
+            Search(now, target, rowCount, columnCount+1, rowIndex, columnIndex+1, maxCount, ref answer);
+
+            for(int i = 0 ; i < now.GetLength(0) ; i++)
+            {
+                if(now[i,columnIndex] == 0)
+                    now[i,columnIndex] = 1;
+                else
+                    now[i,columnIndex] = 0;                    
+            }
+        }
+        else
+        {
+            bool isSame = true;
+            for(int i = 0 ; i < now.GetLength(0); i++)
+            {
+                if(!isSame)
+                    break;
+                for(int j = 0 ; j < now.GetLength(1) ; j++)
+                {
+                    if(now[i,j] != target[i,j])
+                    {
+                        isSame = false;
+                        break;
+                    }
+                }
+            }
+            if(isSame && (answer == -1 || answer > rowCount+columnCount))
+            {
+                answer = rowCount+columnCount;
+                return;
+            }               
+        }
+    }
+    
+    public int solution(int[,] beginning, int[,] target) {
+        int answer = -1;        
+        int maxCount = beginning.GetLength(0)+beginning.GetLength(1);
+        
+        Search(beginning, target, 0, 0, 0, 0, maxCount, ref answer);
+        
+        return answer;
+    }
+}
