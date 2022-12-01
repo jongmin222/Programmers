@@ -1,0 +1,103 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class Solution {
+    void Rotation(int[,] clockHands, int a, int b, int val)
+    {       
+        clockHands[a,b] += val;        
+        if(clockHands[a,b] >= 4)
+            clockHands[a,b] -= 4;
+        else if(clockHands[a,b] < 0)
+                clockHands[a,b] += 4;
+        
+        if(a > 0)
+        {
+            clockHands[a-1,b] += val;            
+            if(clockHands[a-1,b] >= 4)
+                clockHands[a-1,b] -= 4;
+            else if(clockHands[a-1,b] < 0)
+                clockHands[a-1,b] += 4;
+        }
+        
+        if(a < clockHands.GetLength(0)-1)
+        {
+            clockHands[a+1,b] += val;
+            if(clockHands[a+1,b] >= 4)
+                clockHands[a+1,b] -= 4;
+            else if(clockHands[a+1,b] < 0)
+                clockHands[a+1,b] += 4;
+        }
+        
+        if(b > 0)
+        {
+            clockHands[a,b-1] += val;
+            if(clockHands[a,b-1] >= 4)
+                clockHands[a,b-1] -= 4;
+            else if(clockHands[a,b-1] < 0)
+                clockHands[a,b-1] += 4;
+        }
+        
+        if(b < clockHands.GetLength(1)-1)
+        {
+            clockHands[a,b+1] += val;
+            if(clockHands[a,b+1] >= 4)
+                clockHands[a,b+1] -= 4;
+            else if(clockHands[a,b+1] < 0)
+                clockHands[a,b+1] += 4;
+        }
+    }    
+    
+    void Search(int[,] clockHands ,int count, int index, List<int> list)
+    {
+        if(index < clockHands.GetLength(1))
+        {            
+            for(int k = 0 ; k < 4 ; k++)
+            {
+                if(k != 0)
+                    Rotation(clockHands,0,index,k);
+                
+                Search((int[,])clockHands.Clone(),count+k,index+1,list);
+
+                if(k != 0)
+                    Rotation(clockHands,0,index,-k);
+            }
+            
+            return;
+        }
+        //첫번째 줄 다 돌렸음.
+        else if(index == clockHands.GetLength(1))
+        {
+            for(int i = 0 ; i < clockHands.GetLength(0)-1 ; i++)
+            {
+                for(int j = 0 ; j < clockHands.GetLength(1) ; j++)
+                {
+                    if(clockHands[i,j]!=0)
+                    {
+                        count += 4-clockHands[i,j];
+                        Rotation(clockHands,i+1,j,4-clockHands[i,j]);
+                    }
+                }
+            }
+            
+            bool isZero = true;
+            for(int i = 0 ; i < clockHands.GetLength(0) ; i++)
+                for(int j = 0 ; j < clockHands.GetLength(1) ; j++)
+                    if(clockHands[i,j]!=0)     
+                        isZero = false;
+            if(isZero)
+                list.Add(count);
+        }
+    }    
+        
+    public int solution(int[,] clockHands) {
+        int answer = 0;        
+        List<int> list = new List<int>();
+       
+        Search(clockHands,0,0,list);
+        if(list.Count > 0)
+            answer = list.Min();
+        
+        return answer;
+    }
+}
