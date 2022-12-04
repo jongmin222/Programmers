@@ -1,0 +1,103 @@
+using System;
+
+public class Solution {
+    public int[] solution(int target) {        
+        int[] score = new int[target+1];
+        int[] single = new int[target+1];
+        
+        for(int i = 1 ; i <= 20 ; i++)
+        {
+            if(i <= target)
+            {
+                ++score[i];                
+                ++single[i];            
+            }
+            if(i*2 <= target)
+                ++score[i*2];
+            
+            if(i*3 <= target)
+                ++score[i*3];
+        }
+        if(50 <= target)
+        {
+            ++score[50];
+            ++single[50];
+        }
+        
+        for(int now = 1 ; now < target ; now++)
+        {
+            for(int gap = 1 ; gap <= 20 ; gap++)
+            {
+                if(now+gap <= target && (score[now+gap] > score[now]+1 || score[now+gap] == 0||(score[now+gap] == score[now]+1&&single[now+gap] < single[now]+1)))
+                {
+                    score[now+gap] = score[now]+1;
+                    single[now+gap] = single[now]+1;
+                }
+                if(now+gap*2 <= target && (score[now+gap*2] > score[now]+1 || score[now+gap*2] == 0))
+                    score[now+gap*2] = score[now]+1;
+                if(now+gap*3 <= target && (score[now+gap*3] > score[now]+1 || score[now+gap*3] == 0))
+                    score[now+gap*3] = score[now]+1;                
+            }
+            
+            if(now+50 <= target && (score[now+50] > score[now]+1 || score[now+50] == 0||(score[now+50] == score[now]+1&&single[now+50] < single[now]+1)))
+            {
+                score[now+50] = score[now]+1;
+                single[now+50] = single[now]+1;
+            }
+        }
+        
+        int[] answer = new int[2]{score[target],single[target]};
+        return answer;            
+    }
+}using System;
+
+public class Solution {
+    public int[] solution(int target) {        
+        int[] score = new int[target+1];
+        int[] single = new int[target+1];
+        
+        for(int i = 1 ; i <= 20 ; i++)
+        {
+            if(i <= target)
+            {
+                ++score[i];                
+                ++single[i];            
+            }
+            if(i*2 <= target)
+                ++score[i*2];
+            
+            if(i*3 <= target)
+                ++score[i*3];
+        }
+        if(50 <= target)
+        {
+            ++score[50];
+            ++single[50];
+        }
+        
+        for(int now = 1 ; now < target ; now++)
+        {
+            for(int gap = 1 ; gap <= 20 ; gap++)
+            {
+                if(now+gap <= target && (score[now+gap] > score[now]+1 || score[now+gap] == 0||(score[now+gap] == score[now]+1&&single[now+gap] < single[now]+1)))
+                {
+                    score[now+gap] = score[now]+1;
+                    single[now+gap] = single[now]+1;
+                }
+                if(now+gap*2 <= target && (score[now+gap*2] > score[now]+1 || score[now+gap*2] == 0))
+                    score[now+gap*2] = score[now]+1;
+                if(now+gap*3 <= target && (score[now+gap*3] > score[now]+1 || score[now+gap*3] == 0))
+                    score[now+gap*3] = score[now]+1;                
+            }
+            
+            if(now+50 <= target && (score[now+50] > score[now]+1 || score[now+50] == 0||(score[now+50] == score[now]+1&&single[now+50] < single[now]+1)))
+            {
+                score[now+50] = score[now]+1;
+                single[now+50] = single[now]+1;
+            }
+        }
+        
+        int[] answer = new int[2]{score[target],single[target]};
+        return answer;            
+    }
+}
