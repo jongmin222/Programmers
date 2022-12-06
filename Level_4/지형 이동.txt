@@ -1,0 +1,105 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {        
+    
+    public int solution(int[,] land, int height) {
+        int answer = 0;
+        
+        int[] dx = new int[4]{0,1,0,-1};
+        int[] dy = new int[4]{1,0,-1,0};
+        
+        bool[,] mask = new bool[land.GetLength(0), land.GetLength(1)];
+        int[,] count = new int[land.GetLength(0), land.GetLength(1)];
+        
+        Queue<(int, int)> queue = new Queue<(int, int)>();
+        Dictionary<(int,int), bool> dictionary = new Dictionary<(int,int), bool>();
+        Dictionary<(int,int), int> ladder = new Dictionary<(int,int), int>();
+        
+        mask[0,0] = true;
+        queue.Enqueue((0,0));
+        while(queue.Count > 0)
+        {
+            (int x,int y) = queue.Dequeue();
+            
+            for(int i = 0 ; i < 4 ; i++)
+            {  
+                int X = x+dx[i];
+                int Y = y+dy[i];
+                
+                if(dictionary.ContainsKey((X,Y)))
+                    continue;
+                
+                if(0 <= X && X < land.GetLength(1) && 0 <= Y && Y < land.GetLength(0))
+                {  
+                    int gap = Math.Abs(land[x,y] - land[X,Y]);
+                    
+                    if(gap <= height)
+                    {
+                        if(mask[X,Y])
+                        {                            
+                            if(count[X,Y] > 0)
+                            {
+                                count[X,Y] = 0;
+                                queue.Enqueue((X,Y));
+                                ladder.Remove((X,Y));
+                            }                            
+                        }
+                        else
+                        {
+                            mask[X,Y] = true;
+                            queue.Enqueue((X,Y));
+                        }
+                    }
+                    else
+                    {
+                        if(mask[X,Y])
+                        {
+                            if(count[X,Y] > gap)
+                            {
+                                count[X,Y] = gap;
+                                ladder[(X,Y)] = gap;
+                            }
+                        }
+                        else
+                        {
+                            mask[X,Y] = true;
+                            count[X,Y] = gap;
+                            ladder.Add((X,Y),gap);
+                        }
+                    }                    
+                }
+            }
+            
+            if(queue.Count == 0)
+            {                
+                int min = 10000;
+                int indexX = 0;
+                int indexY = 0;
+                
+                bool isFind = false;
+                foreach(KeyValuePair<(int, int), int> item in ladder)
+                {
+                    if(min > item.Value)
+                    {
+                        isFind = true;
+                        min = item.Value;
+                        indexX = item.Key.Item1;
+                        indexY = item.Key.Item2;                        
+                    }
+                }
+                
+                if(isFind)
+                {
+                    queue.Enqueue((indexX,indexY));
+                    dictionary.Add((indexX,indexY), true);
+                    answer += ladder[(indexX,indexY)];
+                }
+                
+                ladder.Remove((indexX,indexY));
+            }
+        }
+        
+        return answer;
+    }
+}
