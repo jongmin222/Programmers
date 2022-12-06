@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {    
+    bool DFS(Dictionary<int, List<int>> dictionary, int now,bool[] light, bool[] mask)
+    {
+        bool isFind = false;        
+        mask[now] = true;
+        
+        foreach(int next in dictionary[now])
+        {            
+            if(mask[next])
+                continue;
+
+            isFind = true;
+            
+            bool result = DFS(dictionary,next,light,mask);
+
+            if(!result)
+                light[now] = true;
+        }
+        
+        return light[now] && isFind;
+    }
+    
+    public int solution(int n, int[,] lighthouse) {
+        int answer = 0;
+        bool[] light = new bool[n+1];
+        bool[] mask = new bool[n+1];
+        
+        Dictionary<int,List<int>> dictionary = new Dictionary<int, List<int>>();        
+        for(int i = 1 ; i <= n ; i++)
+            dictionary.Add(i,new List<int>());        
+        for(int i = 0 ; i < lighthouse.GetLength(0) ;i++)
+        {
+            dictionary[lighthouse[i,0]].Add(lighthouse[i,1]);
+            dictionary[lighthouse[i,1]].Add(lighthouse[i,0]);
+        }        
+        
+        DFS(dictionary,1,light,mask);
+        
+        for(int i = 0 ; i < light.Length; i++)
+            if(light[i])
+                answer++;
+        
+        return answer;
+    }
+}
