@@ -1,0 +1,93 @@
+using System;
+using System.Collections.Generic;
+
+//임의의 지점에서 끝 지점 한개 탐색(a)
+
+//처음 찾은 한개 지점에서 가장 먼 지점 탐색 (a -> b)
+//만약 2개 이상 지점이 찾아지면 최대값 리턴
+
+//가장 먼 지점 에서 다시 가장 먼 지점 탐색 (b -> c)
+//만약 2개 이상 지점이 찾아지면 최대값 리턴
+//한개 지점이 찾아지면 최대값- 1리턴
+
+public class Solution {
+    void DFS(Dictionary<int,List<int>> edge, int now, bool[] mask, int length, ref int maxLength, ref int count, ref int target)
+    {
+        bool isFind = false;
+        foreach(int next in edge[now])
+        {
+            if(mask[next])
+                continue;
+
+            isFind = true;
+            mask[next] = true;
+            DFS(edge, next, mask, length+1, ref maxLength, ref count, ref target);
+            mask[next] = false;
+        }
+
+        if(!isFind)
+        {
+            if(maxLength < length)
+            {
+                maxLength = length;
+                target = now;
+                count = 0;
+            }
+            if(maxLength == length)
+                ++count;
+        }
+    }
+
+    public int solution(int n, int[,] edges) {
+        int answer = 0;
+        Dictionary<int,List<int>> edge = new Dictionary<int,List<int>>();
+        for(int i = 1 ; i <= n ; i++)
+        {
+            edge.Add(i,new List<int>());
+        }
+
+        for(int i = 0 ; i < edges.GetLength(0) ; i++)
+        {
+            edge[edges[i,0]].Add(edges[i,1]);
+            edge[edges[i,1]].Add(edges[i,0]);            
+        }
+
+        int start = 1;        
+        int maxLength = 0;
+        int count = 0;        
+        int target = 0;              
+        bool[] mask = new bool[n+1];
+
+        DFS(edge, start, mask, 0, ref maxLength, ref count, ref target);
+
+        start = target;
+        maxLength = 0;  
+        count = 0;
+        target = 0;        
+        mask[start] = true;
+
+        DFS(edge, start, mask, 0, ref maxLength, ref count, ref target);
+
+        if(count > 1)
+        {
+            answer = maxLength;
+            return answer;
+        }
+
+        mask[start] = false;
+        start = target;
+        maxLength = 0;  
+        count = 0;
+        target = 0;        
+        mask[start] = true;
+
+        DFS(edge, start, mask, 0, ref maxLength, ref count, ref target);
+
+        if(count > 1)
+            answer = maxLength;
+        else
+            answer = maxLength-1;
+
+        return answer;
+    }
+}
