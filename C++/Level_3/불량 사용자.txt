@@ -1,0 +1,55 @@
+#include <string>
+#include <vector>
+#include <queue>
+#include <set>
+
+using namespace std;
+
+int solution(vector<string> user_id, vector<string> banned_id) {
+    int answer = 0;    
+    vector<bool> _mask(user_id.size());
+    set<vector<bool>> s;
+    
+    queue<pair<int,vector<bool>>> q;
+    q.push({0,_mask});
+    while(!q.empty())
+    {
+        int now = q.front().first;
+        vector<bool> mask = q.front().second;
+        q.pop();
+        
+        for(int i = 0 ; i < user_id.size() ; i++)
+        {            
+            if(user_id[i].size() != banned_id[now].size() || mask[i])
+                continue;
+            
+            bool isSame = true;
+            for(int j = 0 ; j < user_id[i].size() ;j++)
+            {   
+                if(banned_id[now][j]=='*')
+                    continue;
+                
+                if(user_id[i][j] != banned_id[now][j])
+                {
+                    isSame = false;
+                    break;
+                }
+            }
+            if(isSame)
+            {
+                mask[i] = true;
+                
+                if(now == banned_id.size()-1)
+                    s.insert(mask);
+                else
+                    q.push({now+1,mask});
+                
+                mask[i] = false;
+            }
+        }
+    }
+    
+    answer = s.size();
+    
+    return answer;
+}

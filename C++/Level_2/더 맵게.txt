@@ -1,0 +1,43 @@
+#include <string>
+#include <vector>
+#include <queue>
+#include <functional>
+
+using namespace std;
+bool compare(int a, int b)
+{
+    return a > b;    
+}
+
+int solution(vector<int> scoville, int K) {
+    int answer = 0;
+    
+    priority_queue<int, vector<int>,greater<int>> q(scoville.begin(), scoville.end());
+    
+    int min = 0;
+    while(q.size() > 0)
+    {  
+        if(min == 0)
+        {
+            if(q.top() >= K)
+                break;
+            
+            min = q.top();
+            q.pop();
+        }
+        else if(min < K)
+        {
+            min = min + q.top()*2;
+            q.pop();
+            q.push(min);
+            
+            min = 0;            
+            answer++;
+        }
+    }
+    
+    if(min != 0 && min < K)
+        answer = -1;
+    
+    return answer;
+}
