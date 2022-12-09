@@ -1,0 +1,71 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public int solution(string numbers) {
+        int answer = 0;        
+        int[,] costs = new int[10,10]{{ 1, 7, 6, 7, 5, 4, 5, 3, 2, 3 },
+                                      { 7, 1, 2, 4, 2, 3, 5, 4, 5, 6 },
+                                      { 6, 2, 1, 2, 3, 2, 3, 5, 4, 5 },
+                                      { 7, 4, 2, 1, 5, 3, 2, 6, 5, 4 },
+                                      { 5, 2, 3, 5, 1, 2, 4, 2, 3, 5 },
+                                      { 4, 3, 2, 3, 2, 1, 2, 3, 2, 3 },
+                                      { 5, 5, 3, 2, 4, 2, 1, 5, 3, 2 },
+                                      { 3, 4, 5, 6, 2, 3, 5, 1, 2, 4 },
+                                      { 2, 5, 4, 5, 3, 2, 3, 2, 1, 2 },
+                                      { 3, 6, 5, 4, 5, 3, 2, 4, 2, 1 }};
+        
+        int[] number = new int[numbers.Length];
+        for(int i = 0 ; i < numbers.Length ; i++)
+            number[i] = numbers[i] - '0';
+        
+        Dictionary<(int,int),int> dictionary = new Dictionary<(int,int),int>();
+        dictionary.Add((4,6),0);
+        
+        for(int i = 0 ; i < number.Length ; i++)
+        {
+            Dictionary<(int,int),int> current = new Dictionary<(int,int),int>();
+            foreach(KeyValuePair<(int left,int right),int> item in dictionary)
+            {
+                if(number[i]==item.Key.left || number[i]==item.Key.right)
+                {
+                    if(current.ContainsKey(item.Key))
+                    {
+                        if(current[item.Key] > item.Value+1)
+                            current[item.Key] = item.Value+1;
+                    }
+                    else
+                        current.Add(item.Key,item.Value+1);
+                }
+                else
+                {
+                    if(current.ContainsKey((number[i],item.Key.right)))
+                    {
+                        if(current[(number[i],item.Key.right)] > item.Value+costs[item.Key.left,number[i]])
+                            current[(number[i],item.Key.right)] = item.Value+costs[item.Key.left,number[i]];
+                    }
+                    else
+                        current.Add((number[i],item.Key.right),item.Value+costs[item.Key.left,number[i]]);
+                    
+                    if(current.ContainsKey((item.Key.left,number[i])))
+                    {
+                        if(current[(item.Key.left,number[i])] > item.Value+costs[item.Key.right,number[i]])
+                            current[(item.Key.left,number[i])] = item.Value+costs[item.Key.right,number[i]];
+                    }
+                    else
+                        current.Add((item.Key.left, number[i]),item.Value+costs[item.Key.right,number[i]]);
+                }
+            }
+            
+            dictionary = new Dictionary<(int,int),int>();
+            foreach(KeyValuePair<(int,int),int> item in current)
+                dictionary.Add(item.Key,item.Value);
+        }
+        
+        foreach(KeyValuePair<(int,int),int> item in dictionary)
+            if(answer > item.Value || answer == 0)
+                answer = item.Value;
+        
+        return answer;
+    }
+}
