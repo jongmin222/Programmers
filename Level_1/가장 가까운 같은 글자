@@ -1,0 +1,23 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public int[] solution(string s) {
+        int[] answer = new int[s.Length];
+        Dictionary <char, int> dictionary = new Dictionary<char, int>(26);
+        
+        for(char ch = 'a' ; ch <= 'z' ; ch++)
+            dictionary.Add(ch,-1);
+        
+        for(int i = 0 ; i < s.Length; i++)
+        {
+            if(dictionary[s[i]] == -1)
+                answer[i] = -1;
+            else
+                answer[i] = i - dictionary[s[i]];            
+            dictionary[s[i]] = i;
+        }
+        
+        return answer;
+    }
+}
