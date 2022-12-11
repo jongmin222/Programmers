@@ -1,0 +1,30 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class Solution {
+    public int[] solution(int k, int[] score) {
+        int[] answer = new int[score.Length];
+        
+        int[] scores = new int[k];
+        for(int i  = 0 ; i < k ; i++)
+            scores[i] = score[0];
+            
+        for(int i = 0 ; i < score.Length ; i++)
+        {
+            if(i < k)
+                scores[i] = score[i];
+            else
+            {
+                int min = scores.Min();
+                if(min < score[i])
+                {
+                    scores[Array.IndexOf(scores, min)] = score[i];            
+                }
+            }
+            answer[i] = scores.Min();
+        }
+        
+        return answer;
+    }
+}
