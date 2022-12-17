@@ -1,0 +1,61 @@
+#include <string>
+#include <vector>
+#include <queue>
+#include <tuple>
+using namespace std;
+
+int solution(vector<vector<int>> board) {
+    int answer = 600*25*25;
+    int dx[4] = {0,1,0,-1};
+    int dy[4] = {1,0,-1,0};    
+    vector<vector<int>> costs(board.size(),vector<int>(board[0].size(),600*25*25));
+    queue<tuple<int,int,int,int>> q;
+    
+    costs[0][0] = 0;  
+    if(board[0][1]==0)
+    {
+        costs[0][1] = 100;
+        q.push({0,1,0,100});
+    }
+    if(board[1][0]==0)
+    {
+        costs[1][0] = 100;
+        q.push({1,0,1,100});
+    }
+    
+    while(!q.empty())
+    {
+        tuple<int,int,int,int> t = q.front();
+        q.pop();
+        
+        int nowX = get<0>(t);
+        int nowY = get<1>(t);
+        int direction = get<2>(t);
+        int cost = get<3>(t);
+                
+        for(int i = 0 ; i < 4 ; i++)
+        {  
+            int nextX = nowX + dx[i];
+            int nextY = nowY + dy[i];
+            
+            if(!(0 <= nextX && nextX < board.size() && 0 <= nextY && nextY < board[0].size()))
+                continue;            
+            if(board[nextX][nextY]==1)
+                continue;
+            
+            int nextCost = cost+(direction==i?100:600);
+            
+            if(costs[nextX][nextY]+500 <= nextCost)
+                continue;
+            
+            if(costs[nextX][nextY] > nextCost)
+               costs[nextX][nextY] = nextCost;
+            
+            q.push({nextX,nextY,i,nextCost});            
+        }
+    }
+    
+    answer = costs[costs.size()-1][costs[0].size()-1];
+    
+    return answer;
+}
