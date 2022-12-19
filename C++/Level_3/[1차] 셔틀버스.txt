@@ -1,0 +1,52 @@
+#include <string>
+#include <vector>
+#include <sstream>
+#include <queue>
+
+using namespace std;
+
+string solution(int n, int t, int m, vector<string> timetable) {
+    string answer = "";
+    priority_queue<int, vector<int>, greater<int>> pq;
+        
+    for(int i = 0 ; i < timetable.size() ; ++i)
+    {
+        vector<string> strTime;
+        stringstream ss(timetable[i]);
+        string temp;
+        
+        while (getline(ss, temp, ':'))
+            strTime.push_back(temp);
+        
+        pq.push(stoi(strTime[0])*60+stoi(strTime[1]));
+    }
+    
+    int lastTime;
+    for(int currentTime = 540 ; currentTime < 540+n*t ; currentTime+=t)
+    {
+        int count = 0;
+        
+        for(int j = 0 ; j < m ; ++j)
+        {
+            if(!pq.empty())
+            {
+                if(pq.top() > currentTime)
+                    break;
+                
+                lastTime = pq.top()-1;
+                pq.pop();
+                ++count;
+            }
+        }
+        
+        if(count < m)
+            lastTime = currentTime;
+    }
+    
+    string hour = to_string(lastTime/60);
+    string minute = to_string(lastTime%60);
+    
+    answer = (stoi(hour)<10 ? '0'+hour : hour) +":"+ (stoi(minute)<10 ? '0'+minute : minute);
+    
+    return answer;
+}
