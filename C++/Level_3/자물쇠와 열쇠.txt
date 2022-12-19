@@ -1,0 +1,80 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<vector<int>> Rotation(vector<vector<int>> key)
+{
+    vector<vector<int>> result(key.size(),vector<int>(key.size(),0));
+    
+    for(int i = 0 ; i < key.size() ; ++i)
+    {
+        for(int j = 0 ; j < key.size() ; ++j)
+        {
+            result[i][j] = key[key.size()-j-1][i];            
+        }        
+    }
+    
+    return result;
+}
+
+bool solution(vector<vector<int>> key, vector<vector<int>> lock) {
+    bool answer = false;
+    
+    vector<vector<int>> key2 = Rotation(key);
+    vector<vector<int>> key3 = Rotation(key2);
+    vector<vector<int>> key4 = Rotation(key3);
+    
+    for(int k = 0 ; k < 4 ; ++k)
+    {
+        for(int l = 1-lock.size() ; l < (const int)lock.size() ; ++l)
+        {
+            for(int m = 1-lock.size() ; m < (const int)lock.size() ; ++m)
+            {
+                bool isFind = false;
+                for(int i = 0 ; i < lock.size() ; ++i)
+                {
+                    for(int j = 0 ; j < lock.size() ; ++j)
+                    {
+                        if(!(0 <= i+l && i+l < key.size() && 0 <= j+m && j+m < key.size()))
+                        {
+                            if(lock[i][j] == 0)
+                            {
+                                isFind = true;
+                                break;
+                            }
+                            else
+                                continue;
+                        }
+                        if(k == 0)
+                        {
+                            if(!(key[i+l][j+m] ^ lock[i][j]))
+                                isFind = true;
+                        }
+                        else if(k == 1)
+                        {
+                            if(!(key2[i+l][j+m] ^ lock[i][j]))
+                                isFind = true;
+                        }
+                        else if(k == 2)
+                        {
+                            if(!(key3[i+l][j+m] ^ lock[i][j]))
+                                isFind = true;
+                        }
+                        else if(k == 3)
+                        {
+                            if(!(key4[i+l][j+m] ^ lock[i][j]))
+                                isFind = true;    
+                        }
+                    }
+                    if(isFind)
+                        break;
+                }
+                
+                if(!isFind)
+                    answer = true;
+            }
+        }
+    }
+    return answer;
+}
