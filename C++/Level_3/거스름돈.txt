@@ -1,0 +1,17 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(int n, vector<int> money) {
+    int answer = 0;
+    vector<int> DP(n+1, 0);
+    DP[0] = 1;
+    
+    for(const auto& item : money)
+        for(int i = item ; i <= n ; ++i)
+            DP[i] += DP[i-item];
+   
+    answer = DP[n];
+    return answer;
+}
