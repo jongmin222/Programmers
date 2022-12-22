@@ -1,0 +1,40 @@
+#include <string>
+#include <vector>
+using namespace std;
+
+int solution(int n) {
+    int answer = 0;
+    int maxNum = 0;
+    int sum = 0;
+    for(int i = 1 ; i <= n ; ++i)
+    {
+        sum += i;
+        if(sum == n)
+        {
+            maxNum = i;
+            break;
+        }
+        
+        if(sum > n)
+        {
+            maxNum = i-1;
+            break;
+        }
+    }
+    
+    for(int i = 1 ; i <= maxNum ; ++i)
+    {
+        if(i % 2 == 1)
+        {
+            if(n%i==0)
+                ++answer;
+        }
+        else
+        {
+            if(n%i==i/2)
+                ++answer;
+        }
+    }
+    
+    return answer;
+}
