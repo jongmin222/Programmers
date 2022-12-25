@@ -1,0 +1,31 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+
+int solution(vector<int> people, int limit) {
+    int answer = 0;
+    int count = 0;
+    sort(people.begin(),people.end(),greater<int>());
+    
+    int back = people.size()-1;
+    for(int front = 0 ; front < people.size() ; ++front)
+    {
+        if(limit >= people[front]*2)
+        {
+            count += (back-front+1)/2 + (back-front+1)%2;
+            break;
+        }
+        
+        if(limit >= people[front]+people[back])
+            --back;
+        
+        ++count;
+    }
+    
+    answer = count;
+    
+    return answer;    
+}
