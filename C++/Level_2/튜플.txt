@@ -1,0 +1,54 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <unordered_set>
+
+using namespace std;
+bool cmp(vector<int> a, vector<int> b)
+{    
+    return a.size() < b.size();
+}
+
+vector<int> solution(string s) {
+    vector<int> answer;
+    vector<vector<int>> v;
+    unordered_set <int> us;
+    int start;
+    int length;
+    for(int i = 1 ; i < s.size()-1 ; ++i)
+    {
+        if(s[i]=='{')
+        {
+            v.push_back(vector<int>());
+            start = i+1;
+            length = 0;            
+        }        
+        else if(s[i] ==',' && s[i+1] != '{')
+        {
+            v[v.size()-1].push_back(stoi(s.substr(start,length)));
+            start = i+1;
+        }        
+        else if(s[i]=='}')
+        {
+            v[v.size()-1].push_back(stoi(s.substr(start,length)));
+        }
+        
+        ++length;
+    }
+    
+    sort(v.begin(),v.end(),cmp);
+    
+    for(int i = 0 ; i < v.size() ; ++i)
+    {
+        for(const auto& item : v[i])
+        {
+            if(us.find(item) == us.end())
+            {
+                answer.push_back(item);
+                us.insert(item);
+            }
+        }        
+    }
+    
+    return answer;
+}
