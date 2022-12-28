@@ -1,0 +1,61 @@
+#include <string>
+#include <vector>
+#include <map>
+
+using namespace std;
+void LZW(const string& msg, map<string, int>& dict, int index, int length, vector<int>& answer)
+{
+    if(msg.size() < index+length)
+        return; 
+    
+    if(msg.size() == index+length)
+    {
+        const auto iter = dict.find(msg.substr(index,length));
+        
+        if(iter != dict.end())
+        {
+            answer.push_back(iter->second);
+            return;
+        }
+    }
+
+    string input = msg.substr(index,length);
+    
+    if(dict.find(input) == dict.end())
+    {
+        dict.insert({input,dict.size()+1});        
+        
+        int count = 1;
+        auto iter = dict.find(msg.substr(index,length-count));        
+        while(iter == dict.end())
+        {
+            ++count;
+            iter = dict.find(msg.substr(index,length-count));            
+        }
+        
+        answer.push_back(iter->second);
+        
+        LZW(msg, dict, index+length-1, 1, answer);
+    }
+    else
+    {
+        LZW(msg, dict, index, length+1, answer);
+    }
+    
+    return;
+}
+
+vector<int> solution(string msg) {
+    vector<int> answer;
+    map<string, int> dict;
+    for(char ch = 'A' ; ch <= 'Z' ; ++ch)
+    {
+        string str;
+        str += ch;        
+        dict.insert({str,(int)(ch-'A')+1});
+    }
+    
+    LZW(msg,dict,0,1, answer);
+    
+    return answer;
+}
