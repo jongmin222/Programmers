@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(int m, int n, vector<string> board) {
+    int answer = 0;
+    vector<vector<bool>> eraser(board.size(),vector<bool>(board[0].size(), false));    
+
+    bool isFind = true;
+    while(isFind)
+    {
+        isFind = false;
+        
+        //제거 위치 찾기
+        for(int i = 0 ; i < board.size()-1 ; ++i)
+        {
+            for(int j = 0 ; j < board[i].size()-1 ; ++j)
+            {
+                if(board[i][j]!= 'X' && board[i][j] == board[i][j+1] && board[i][j] == board[i+1][j] && board[i][j] == board[i+1][j+1])
+                {
+                    eraser[i][j] = true;
+                    eraser[i][j+1] = true;
+                    eraser[i+1][j] = true;
+                    eraser[i+1][j+1] = true;
+                    isFind = true;
+                }
+            }
+        }
+        
+        //제거
+        for(int i = 0 ; i < eraser.size() ; ++i)
+        {
+            for(int j = 0 ; j < eraser[0].size() ; ++j)
+            {
+                if(eraser[i][j])
+                {
+                    eraser[i][j] = false;                    
+                    board[i][j] = 'X';
+                    ++answer;
+                }
+            }
+        }
+        
+        //블럭 내려오기
+        for(int i = board.size()-1 ; i >= 0  ; --i)
+        {
+            for(int j = 0 ; j < board[i].size() ; ++j)
+            {
+                if(board[i][j] == 'X')
+                {
+                    int count = 1;
+                    while(i-count >= 0 && board[i-count][j] == 'X')
+                        ++count;                    
+                    if(i-count < 0)
+                        count = i;
+                    
+                    char temp = board[i][j];
+                    board[i][j] = board[i-count][j];
+                    board[i-count][j] = temp;
+                }
+            }
+        }        
+    }
+    
+    return answer;
+}
