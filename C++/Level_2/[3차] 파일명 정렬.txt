@@ -1,0 +1,51 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void init(const string& str, string& head, int& number)
+{
+    int i = 0;    
+    for(;i < str.size() ; ++i)
+        if('0' <= str[i] && str[i] <= '9')
+            break;
+    
+    int j = i;
+    for(;j < str.size() ; ++j)
+        if(!('0' <= str[j] && str[j] <= '9'))
+            break;
+    
+    head = str.substr(0,i);
+    number = stoi(str.substr(i,i-j));
+}
+
+bool cmp(string a , string b)
+{
+    string aHead, bHead;
+    int aNum ,bNum;
+    init(a,aHead,aNum);
+    init(b,bHead,bNum);
+    
+    int length = min(aHead.size(),bHead.size());
+    for(int i = 0 ; i < length ; ++i)
+    {
+        if('A' <= aHead[i] && aHead[i] <= 'Z')
+            aHead[i] += 32;
+        if('A' <= bHead[i] && bHead[i] <= 'Z')
+            bHead[i] += 32;
+        
+        if(aHead[i] != bHead[i])            
+            return aHead[i] < bHead[i];
+    }
+    
+    if(aHead.size() != bHead.size())
+        return aHead.size() < bHead.size();
+    
+    return aNum < bNum;
+}
+vector<string> solution(vector<string> files) {    
+    stable_sort(files.begin(), files.end(), cmp);
+    
+    return files;
+}
