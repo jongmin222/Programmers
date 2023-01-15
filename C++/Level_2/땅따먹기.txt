@@ -1,0 +1,44 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+int solution(vector<vector<int> > land)
+{
+    int answer = 0;
+    
+    for(int i = 0 ; i < land.size()-1 ; ++i)
+    {
+        int max = land[i][0];
+        int mid = 0;
+        int maxIndex = 0;
+        for(int j = 1 ; j < 4 ; ++j)
+        {           
+            if(max < land[i][j])
+            {
+                if(mid < max)
+                    mid = max;
+                max = land[i][j];
+                maxIndex = j;
+            }
+            else
+            {
+                if(mid < land[i][j])
+                    mid = land[i][j];
+            }
+        }
+        
+        for(int j = 0 ; j < 4 ; ++j)
+        {
+            if(j == maxIndex)
+                land[i+1][j] += mid;
+            else
+                land[i+1][j] += max;
+        }
+    }
+    
+    for(int i = 0 ; i < 4 ; ++i)
+        if(answer < land[land.size()-1][i])
+            answer = land[land.size()-1][i];
+    
+    return answer;
+}
