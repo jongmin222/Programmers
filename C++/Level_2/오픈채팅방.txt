@@ -1,0 +1,52 @@
+#include <string>
+#include <vector>
+#include <sstream>
+#include <map>
+
+using namespace std;
+vector<string> split(string input, char delimiter) {
+    vector<string> result;
+    stringstream ss(input);
+    string temp;
+ 
+    while (getline(ss, temp, delimiter)) {
+        result.push_back(temp);
+    }
+ 
+    return result;
+}
+vector<string> solution(vector<string> record) {
+    vector<string> answer;
+    
+    map<string, string> id;
+    
+    for(int i = 0 ; i < record.size() ; ++i)
+    {
+        vector<string> words = split(record[i], ' ');
+        
+        if(words.size()!=2)
+        {
+            if(id.find(words[1])!=id.end())
+                id[words[1]] = words[2];
+            else
+                id.insert({words[1], words[2]});
+        }
+    }
+    
+    for(int i = 0 ; i < record.size() ; ++i)
+    {
+        vector<string> words = split(record[i], ' ');        
+        string str;
+        
+        if(words[0]=="Enter")
+            str += id[words[1]] + "님이 들어왔습니다.";
+        else if(words[0]=="Leave")
+            str += id[words[1]] + "님이 나갔습니다.";
+        else if(words[0]=="Change")
+            continue;
+        
+        answer.push_back(str);
+    }
+    
+    return answer;
+}
